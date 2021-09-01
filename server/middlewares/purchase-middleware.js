@@ -31,7 +31,6 @@ module.exports = async (req, res, next) => {
         }).then(res => res.json()));
       console.log("promises:", promises)
       newReservations = await Promise.all(promises);
-      //await promises[0].then(r => newReservations = r)
     } catch (ex) {
       console.error("Error creating a reservation", ex);
       res.status(500).send('Error creating a reservation.')
