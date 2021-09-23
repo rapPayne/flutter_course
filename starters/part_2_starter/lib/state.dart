@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import './Film.dart';
 
+final cartProvider = StateProvider<dynamic>((_) => null);
 final titleProvider = StateProvider((_) => 'Prestige Worldwide');
 final filmsProvider = StateProvider<List<Film>>((_) => <Film>[]);
 final selectedDateProvider = StateProvider<DateTime?>((_) => null);
 final selectedFilmProvider = StateProvider<Film?>((_) => null);
+final selectedShowingProvider = StateProvider<dynamic>((_) => null);
 final showingsProvider = StateProvider((_) => <dynamic>[]);
 final showFilmDetailsProvider = StateProvider((_) => false);
 
@@ -43,10 +45,22 @@ Future<Film> fetchFilm({required int id}) {
   });
 }
 
+// Fetch reservations for a showing
+Future<dynamic> fetchReservationsForShowing({required int showing_id}) {
+  String url = "${getBaseUrl()}/api/showings/$showing_id/reservations";
+  return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
 // Fetch showings using a dynamic Map
 Future<dynamic> fetchShowings({required int film_id, required DateTime date}) {
   String url =
       "${getBaseUrl()}/api/showings/$film_id/${DateFormat('yyyy-MM-dd').format(date)}";
+  return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
+// Fetch a theater (which has tables and seats) using a dynamic Map
+Future<dynamic> fetchTheater({required int theater_id}) {
+  String url = "${getBaseUrl()}/api/theaters/$theater_id";
   return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
