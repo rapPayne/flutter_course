@@ -12,6 +12,7 @@ const startingReservationId = 8573;
 const daysToSchedule = 10;
 const oneDayInMS = 24 * 60 * 60 * 1000;
 const todayInMS = (new Date()).getTime();
+const yesterdayInMS = todayInMS - oneDayInMS;
 const givenNames = require('./starters/given-names.json');
 const familyNames = require('./starters/family-names.json');
 const mailServers = require('./starters/mail-servers.json');
@@ -156,7 +157,7 @@ function makeShowingsData() {
     const theater_id = database.theaters[index].id
     // Create a daily schedule for the next X days
     const lastDayInMS = todayInMS + daysToSchedule * oneDayInMS;
-    for (let day = todayInMS; day <= lastDayInMS; day += oneDayInMS) {
+    for (let day = yesterdayInMS; day <= lastDayInMS; day += oneDayInMS) {
       const theDay = new Date(day).setHours(0, 0, 0, 0);
       const midnightLocalTime = new Date(day).setHours(23, 59);
       //console.log(`Showing Times:`, film.id, randomStartTime, midnightLocalTime)
