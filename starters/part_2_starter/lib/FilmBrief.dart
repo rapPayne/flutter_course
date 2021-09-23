@@ -1,4 +1,5 @@
 import 'package:daam/ShowingTimes.dart';
+import 'package:daam/state.dart';
 import 'package:flutter/material.dart';
 import 'Film.dart';
 
@@ -10,7 +11,7 @@ class FilmBrief extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Text("FilmBrief"),
-      Image.network("http://localhost:3007${film.poster_path}", height: 100),
+      Image.network("${getBaseUrl()}/${film.poster_path}", height: 100),
       Text(film.title ?? ""),
       Text(film.tagline ?? ""),
       ShowingTimes(
@@ -18,6 +19,9 @@ class FilmBrief extends StatelessWidget {
         film: film,
         selected_date: DateTime.now(),
       ),
+      TextButton(
+          child: Text("Details"),
+          onPressed: () => Navigator.pushNamed(context, "/details")),
     ]);
   }
 }

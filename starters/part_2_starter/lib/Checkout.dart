@@ -33,6 +33,7 @@ class _CheckoutState extends State<Checkout> {
     buyTickets(purchase: _purchase).then((res) {
       // Response will have an array of ticket numbers.
       print("success!");
+      Navigator.pushNamed(context, '/tickets');
     }).catchError((err) {
       print("Error purchasing. ${err}");
     });
@@ -41,6 +42,7 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Check out and pay")),
       body: Form(
         key: _key,
         child: SingleChildScrollView(

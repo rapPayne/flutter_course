@@ -12,7 +12,7 @@ class FilmDetails extends StatefulWidget {
 }
 
 class _FilmDetailsState extends State<FilmDetails> {
-  Film film = Film();
+  Film film = Film()..poster_path = "1.jpg";
   DateTime selected_date = DateTime.now();
   List<dynamic> showings = [];
 
@@ -37,10 +37,14 @@ class _FilmDetailsState extends State<FilmDetails> {
     film = context.read(selectedFilmProvider).state ?? Film();
     showings = context.read(showingsProvider).state;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Film details"),
+      ),
       body: SingleChildScrollView(
           child: Column(
         children: [
-          Image.network("http://localhost:3007/" + (film.poster_path ?? "")),
+          //Image.network("${getBaseUrl()}/${film.poster_path}"),
+          Image.network("${getBaseUrl()}/" + (film.poster_path ?? "")),
           ShowingTimes(
             film: film,
             showings: showings,

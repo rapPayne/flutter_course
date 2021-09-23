@@ -11,8 +11,11 @@ class _TicketState extends State<Ticket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text("Your ticket"),
+        ),
         body: Container(
-      child: Text("Ticket"),
-    ));
+          child: Text("Ticket"),
+        ));
   }
 }

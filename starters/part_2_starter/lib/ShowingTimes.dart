@@ -16,28 +16,36 @@ class ShowingTimes extends StatefulWidget {
 }
 
 class _ShowingTimesState extends State<ShowingTimes> {
-  // RAP: YOU DID NOT TELL THEM TO ADD THIS YET.
-  // List<Widget> makeShowingWidgets(showings) {
-  //   List<Widget> textWidgets = <Widget>[];
-  //   for (int i = 0; i < showings.length; i++) {
-  //     DateTime showingTime = DateTime.parse(showings[i]['showing_time']);
-  //     String timeString = new DateFormat.jm().format(showingTime.toLocal());
-  //     var textWidget = Text(timeString, style: TextStyle(fontSize: 20));
-  //     textWidgets.add(textWidget);
-  //   }
-  //   return textWidgets;
-  // }
-
+  @override
   @override
   Widget build(BuildContext context) {
-    print(widget.showings);
     String selectedDateString =
         new DateFormat.MMMMEEEEd().format(widget.selected_date);
-
     return Column(
       children: [
         Text("Showing times for $selectedDateString for ${widget.film.title}"),
+        Column(
+          children: _makeShowingWidgets(widget.showings),
+        ),
       ],
     );
+  }
+
+  List<Widget> _makeShowingWidgets(showings) {
+    List<Widget> textWidgets = <Widget>[];
+    for (int i = 0; i < showings.length; i++) {
+      DateTime showingTime = DateTime.parse(showings[i]['showing_time']);
+      String timeString = new DateFormat.jm().format(showingTime.toLocal());
+      var textWidget = TextButton(
+        child: Text(timeString),
+        onPressed: () {
+          // TODO 2: Save the showing in state.
+          // TODO 1: Navigate to PickSeats
+          Navigator.pushNamed(context, '/pickseats');
+        },
+      );
+      textWidgets.add(textWidget);
+    }
+    return textWidgets;
   }
 }
