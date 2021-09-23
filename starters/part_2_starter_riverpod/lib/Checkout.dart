@@ -1,5 +1,7 @@
 import 'package:daam/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'state.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _CheckoutState extends State<Checkout> {
     "seats": [1, 2, 3],
     "showing_id": 1,
   };
+  List<Map<String, dynamic>> _cart = [];
   var _key = GlobalKey<FormState>();
 
   void _checkout() {
@@ -41,6 +44,7 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+    _cart = context.read(cartProvider).state;
     return Scaffold(
       appBar: AppBar(title: Text("Check out and pay")),
       body: Form(

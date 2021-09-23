@@ -31,21 +31,23 @@ class _LandingState extends State<Landing> {
     List<Film> films = context.read(filmsProvider).state;
 
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Column(children: [
-        Image.asset("assets/daam.png", height: 75, fit: BoxFit.cover),
-        Text("Dinner And A Movie"),
-        Text(
-            "Tap a movie below to see its details. Then pick a date to see showtimes."),
-        DatePicker(),
-        Column(
-          children: films
-              .map((f) => FilmBrief(
-                    film: f,
-                  ))
-              .toList(),
-        ),
-      ])),
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Column(children: [
+          Image.asset("assets/daam.png", height: 75, fit: BoxFit.cover),
+          Text("Dinner And A Movie"),
+          Text(
+              "Tap a movie below to see its details. Then pick a date to see showtimes."),
+          DatePicker(),
+          Column(
+            children: films
+                .map((f) => FilmBrief(
+                      film: f,
+                    ))
+                .toList(),
+          ),
+        ])),
+      ),
     );
   }
 

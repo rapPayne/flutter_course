@@ -2,6 +2,7 @@ import 'package:daam/Film.dart';
 import 'package:daam/state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ShowingTimes extends StatefulWidget {
   final Film film;
@@ -40,6 +41,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
         child: Text(timeString),
         onPressed: () {
           // TODO 2: Save the showing in state.
+          context.read(selectedShowingProvider).state = showings[i];
           // TODO 1: Navigate to PickSeats
           Navigator.pushNamed(context, '/pickseats');
         },

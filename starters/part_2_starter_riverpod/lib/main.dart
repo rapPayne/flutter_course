@@ -19,17 +19,19 @@ class MyApp extends StatelessWidget {
       var showings = watch(showingsProvider).state; // <-- ... and this ...
 
       return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          routes: {
-            "/": (_) => Landing(),
-            "/details": (_) => FilmDetails(),
-            "/pickseats": (_) => PickSeats(),
-            "/checkout": (_) => Checkout(),
-            "/tickets": (_) => Ticket(),
-          });
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: {
+          "/": (_) => Landing(),
+          "/details": (_) => FilmDetails(),
+          "/pickseats": (_) => PickSeats(),
+          "/checkout": (_) => Checkout(),
+          "/tickets": (_) => Ticket(),
+        },
+        debugShowCheckedModeBanner: false,
+      );
     }); // <-- ... and this
   }
 }

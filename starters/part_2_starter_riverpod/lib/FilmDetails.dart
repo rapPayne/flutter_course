@@ -24,9 +24,9 @@ class _FilmDetailsState extends State<FilmDetails> {
       ..id = 1;
     // Read the currently selected date. Use today if no date has been selected yet.
     selected_date = context.read(selectedDateProvider).state ?? DateTime.now();
-    fetchFilm(id: 1).then((f) => setState(() {
-          context.read(selectedFilmProvider).state = f;
-        }));
+    // fetchFilm(id: 1).then((f) => setState(() {
+    //       context.read(selectedFilmProvider).state = f;
+    //     }));
     // Ask the API server for all of the showings for the selected film and date.
     fetchShowings(film_id: film.id, date: selected_date)
         .then((s) => setState(() => context.read(showingsProvider).state = s));
@@ -41,20 +41,26 @@ class _FilmDetailsState extends State<FilmDetails> {
         title: Text("Film details"),
       ),
       body: SingleChildScrollView(
-          child: Column(
+          child: Flex(
+        direction: MediaQuery.of(context).orientation == Orientation.landscape
+            ? Axis.horizontal
+            : Axis.vertical,
         children: [
-          //Image.network("${getBaseUrl()}/${film.poster_path}"),
           Image.network("${getBaseUrl()}/" + (film.poster_path ?? "")),
-          ShowingTimes(
-            film: film,
-            showings: showings,
-            selected_date: selected_date,
+          Column(
+            children: [
+              ShowingTimes(
+                film: film,
+                showings: showings,
+                selected_date: selected_date,
+              ),
+              Text(film.title ?? ""),
+              Text(film.tagline ?? ""),
+              Text(film.homepage ?? ""),
+              Text(film.overview ?? ""),
+              Text("Rating: ${film.vote_average}/10 ${film.vote_count} votes"),
+            ],
           ),
-          Text(film.title ?? ""),
-          Text(film.tagline ?? ""),
-          Text(film.homepage ?? ""),
-          Text(film.overview ?? ""),
-          Text("Rating: ${film.vote_average}/10 ${film.vote_count} votes"),
         ],
       )),
     );
