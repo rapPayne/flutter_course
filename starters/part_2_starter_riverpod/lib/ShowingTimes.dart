@@ -25,7 +25,8 @@ class _ShowingTimesState extends State<ShowingTimes> {
     return Column(
       children: [
         Text("Showing times for $selectedDateString for ${widget.film.title}"),
-        Column(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _makeShowingWidgets(widget.showings),
         ),
       ],

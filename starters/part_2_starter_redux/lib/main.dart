@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'Checkout.dart';
+import 'Checkout.dart';
 import 'FilmDetails.dart';
 import 'Landing.dart';
 import 'PickSeats.dart';
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
               "/": (_) => Landing(),
               "/details": (_) => FilmDetails(),
               "/pickseats": (_) => PickSeats(),
-              // "/checkout": (_) => Checkout(),
+              "/checkout": (_) => Checkout(),
               // "/tickets": (_) => Ticket(),
             },
             debugShowCheckedModeBanner: false,

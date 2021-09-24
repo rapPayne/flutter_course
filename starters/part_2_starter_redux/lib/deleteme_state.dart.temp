@@ -72,15 +72,6 @@ this point so get their int user_id also.
 */
 // Make a purchase
 Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
-  // String? firstName,
-  // String? lastName,
-  // String? email,
-  // String? phone,
-  // String? creditCardNumber,
-  // String? CVV,
-  // String? expiryMonth,
-  // String? expiryYear,
-  // required int showing_id,
   // If these two don't exist, it'll throw and be caught on the outside.
   List<int> seats = purchase["seats"];
   int showing_id = purchase["showing_id"];

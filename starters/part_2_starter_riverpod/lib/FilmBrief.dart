@@ -18,16 +18,21 @@ class FilmBrief extends StatelessWidget {
       },
       child: Row(
         children: [
-          Image.network("${getBaseUrl()}/${film.poster_path}", height: 100),
-          Column(children: [
-            Text(film.title ?? ""),
-            Text(film.tagline ?? ""),
-            ShowingTimes(
-              showings: [],
-              film: film,
-              selected_date: DateTime.now(),
-            ),
-          ]),
+          Container(
+              margin: EdgeInsets.all(10.0),
+              child: Image.network("${getBaseUrl()}/${film.poster_path}",
+                  height: 100)),
+          Flexible(
+            child: Column(children: [
+              Text(film.title ?? ""),
+              Text(film.tagline ?? ""),
+              ShowingTimes(
+                showings: [],
+                film: film,
+                selected_date: DateTime.now(),
+              ),
+            ]),
+          ),
         ],
       ),
     );

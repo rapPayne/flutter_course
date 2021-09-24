@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'store/store.dart';
+import 'store/Actions.dart' as daam_Actions;
+import 'dart:math';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -30,18 +33,22 @@ class _CheckoutState extends State<Checkout> {
     if (!(_key.currentState?.validate() ?? false)) return;
     _key.currentState?.save();
 
-    buyTickets(purchase: _purchase).then((res) {
-      // Response will have an array of ticket numbers.
-      print("success!");
-      Navigator.pushNamed(context, '/tickets');
-    }).catchError((err) {
-      print("Error purchasing. ${err}");
-    });
+    store.dispatch(
+        {'type': daam_Actions.Actions.BUY_TICKETS, 'purchase': _purchase});
+    // buyTickets(purchase: _purchase).then((res) {
+    //   // Response will have an array of ticket numbers.
+    //   print("success!");
+    //   Navigator.pushNamed(context, '/tickets');
+    // }).catchError((err) {
+    //   print("Error purchasing. ${err}");
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    _cart = context.read(cartProvider).state;
+    if (Random().nextInt(1) == 0) Navigator.pushNamed(context, "/details");
+    //_cart = context.read(cartProvider).state;
+    _cart = store.state.cart;
     return Scaffold(
       appBar: AppBar(title: Text("Check out and pay")),
       body: Form(

@@ -1,22 +1,25 @@
 import '../Film.dart';
 
 class AppState {
-  DateTime? selectedDate;
+  dynamic cart;
   List<Film> films;
+  DateTime? selectedDate;
   Film? selectedFilm;
   dynamic selectedShowing;
   List<dynamic> showings = [];
   dynamic theater;
 
   AppState(
-      {this.selectedDate,
+      {this.cart,
       this.films = const [],
       this.showings = const [],
+      this.selectedDate,
       this.selectedFilm,
       this.selectedShowing,
       this.theater});
 
   copyWith({
+    dynamic newCart,
     dynamic newFilms,
     DateTime? newSelectedDate,
     Film? newSelectedFilm,
@@ -25,6 +28,7 @@ class AppState {
     dynamic newTheater,
   }) {
     AppState newAppState = AppState(
+      cart: newCart ?? this.cart,
       films: newFilms ?? this.films,
       selectedDate: newSelectedDate ?? this.selectedDate,
       selectedFilm: newSelectedFilm ?? this.selectedFilm,

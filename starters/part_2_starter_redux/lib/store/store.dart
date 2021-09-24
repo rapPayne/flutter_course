@@ -21,6 +21,8 @@ AppState reducer(AppState oldState, dynamic action) {
       List<Film> newFilms = oldState.films;
       newFilms.add(action['film']);
       return oldState.copyWith(newFilms: newFilms);
+    case Actions.SET_CART:
+      return oldState.copyWith(newCart: action['cart']);
     case Actions.SET_SELECTED_DATE:
       return oldState.copyWith(newSelectedDate: action['date']);
     case Actions.SET_SELECTED_FILM:
@@ -36,13 +38,13 @@ AppState reducer(AppState oldState, dynamic action) {
   }
 }
 
-final store = new Store<AppState>(reducer,
-    initialState: initialState,
-    middleware: [
-      FetchFilmsMiddleware(),
-      FetchShowingsMiddleware(),
-      FetchTheaterMiddleware()
-    ]);
+final store =
+    new Store<AppState>(reducer, initialState: initialState, middleware: [
+  BuyTicketsMiddleware(),
+  FetchFilmsMiddleware(),
+  FetchShowingsMiddleware(),
+  FetchTheaterMiddleware()
+]);
 
 // Actions below?
 class AddFilmAction {

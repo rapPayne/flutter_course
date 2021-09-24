@@ -108,73 +108,79 @@ class _CheckoutState extends State<Checkout> {
                 ),
                 keyboardType: TextInputType.number,
               ),
-              FormField(
-                onSaved: (val) => _purchase["expiryMonth"] = val,
-                builder: (state) => DropdownButton(
-                  value: _expiryMonth,
-                  onChanged: (String? val) =>
-                      setState(() => _expiryMonth = val),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text("Jan"),
-                      value: "01",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FormField(
+                    onSaved: (val) => _purchase["expiryMonth"] = val,
+                    builder: (state) => DropdownButton(
+                      value: _expiryMonth,
+                      onChanged: (String? val) =>
+                          setState(() => _expiryMonth = val),
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Jan"),
+                          value: "01",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Feb"),
+                          value: "02",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Mar"),
+                          value: "03",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Apr"),
+                          value: "04",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("May"),
+                          value: "05",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Jun"),
+                          value: "06",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Jul"),
+                          value: "07",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Jan"),
+                          value: "08",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Sep"),
+                          value: "09",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Oct"),
+                          value: "10",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Nov"),
+                          value: "11",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Dec"),
+                          value: "12",
+                        ),
+                      ],
                     ),
-                    DropdownMenuItem(
-                      child: Text("Feb"),
-                      value: "02",
+                  ),
+                  FormField(
+                    onSaved: (val) => _purchase["expiryYear"] = val,
+                    builder: (state) => DropdownButton<String>(
+                      value: _expiryYear,
+                      onChanged: (val) => setState(() => _expiryYear = val),
+                      items: ["2021", "2022", "2023", "2024"]
+                          .map(
+                              (y) => DropdownMenuItem(child: Text(y), value: y))
+                          .toList(),
                     ),
-                    DropdownMenuItem(
-                      child: Text("Mar"),
-                      value: "03",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Apr"),
-                      value: "04",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("May"),
-                      value: "05",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Jun"),
-                      value: "06",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Jul"),
-                      value: "07",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Jan"),
-                      value: "08",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Sep"),
-                      value: "09",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Oct"),
-                      value: "10",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Nov"),
-                      value: "11",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Dec"),
-                      value: "12",
-                    ),
-                  ],
-                ),
-              ),
-              FormField(
-                onSaved: (val) => _purchase["expiryYear"] = val,
-                builder: (state) => DropdownButton<String>(
-                  value: _expiryYear,
-                  onChanged: (val) => setState(() => _expiryYear = val),
-                  items: ["2021", "2022", "2023", "2024"]
-                      .map((y) => DropdownMenuItem(child: Text(y), value: y))
-                      .toList(),
-                ),
+                  ),
+                ],
               ),
             ],
           ),

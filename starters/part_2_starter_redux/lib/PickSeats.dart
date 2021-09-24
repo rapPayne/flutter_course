@@ -58,6 +58,8 @@ class _PickSeatsState extends State<PickSeats> {
               _cart.add({"table_number": 10, "seat_number": 4, "price": 10.75});
               // What goes here? Saving the _cart to the cartProvider.
               print('context.read(cartProvider).state = _cart');
+              store.dispatch(
+                  {'type': daam_Actions.Actions.SET_CART, 'cart': _cart});
               Navigator.pushNamed(context, '/checkout');
             },
           ),
