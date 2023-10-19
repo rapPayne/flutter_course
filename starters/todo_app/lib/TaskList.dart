@@ -22,7 +22,7 @@ class TaskList extends StatelessWidget {
     Task()
       ..id = 5
       ..completed = false
-      ..description = "Go for a walk",
+      ..description = "Go for a long run",
   ];
 
   TaskList({Key? key}) : super(key: key);
