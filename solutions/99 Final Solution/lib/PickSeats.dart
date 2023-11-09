@@ -1,54 +1,61 @@
+import 'package:daam/state/AppState.dart';
+import 'package:daam/state/SuperState.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'state.dart';
-import 'providers/selectedShowingProvider.dart';
-import 'providers/reservationsProvider.dart';
-import 'state/Film.dart';
 import 'state/Showing.dart';
+import 'state/Reservation.dart';
 import 'Table.dart' as daamTable;
+import 'state/Seat.dart';
 
-class PickSeats extends ConsumerStatefulWidget {
+class PickSeats extends StatefulWidget {
   const PickSeats({Key? key}) : super(key: key);
 
   @override
   _PickSeatsState createState() => _PickSeatsState();
 }
 
-class _PickSeatsState extends ConsumerState<PickSeats> {
-  var _film = Film();
-  Map<String, dynamic> _theater = {};
-  Showing? _selected_showing;
+class _PickSeatsState extends State<PickSeats> {
+  late List<Map<String, dynamic>> _cart;
+  Showing? _selectedShowing;
   List<Map<String, dynamic>> _reservations = [];
   var selected_date = DateTime.now();
-  List<Map<String, dynamic>> _cart = [];
+  late SuperState _ss;
+
   @override
-  void initState() {
-    super.initState();
-    // Get the selected showing from state
-    _selected_showing = ref.read(selectedShowingProvider);
-    assert(_selected_showing != null,
-        "When picking seats, the showing is null. This should never happen!");
+  void didChangeDependencies() {
+    _ss = SuperState.of(context);
+    _selectedShowing = _ss.state.selectedShowing;
+    assert(_selectedShowing != null,
+        "When picking seats, the selected showing is null. This should never happen!");
+    _cart = _ss.state.cart;
     // Ask the API server for all of the tables and seats for this theater.
-    fetchTheater(theater_id: _selected_showing!.theaterId).then((theater) =>
-        setState(() => ref.read(theaterProvider.notifier).set(theater)));
-    // Ask the API server for all the reservations for this showing.
-    fetchReservationsForShowing(showing_id: _selected_showing!.id).then((res) {
-      var reservations = (res as List).cast<Map<String, dynamic>>();
-      ref.read(reservationsProvider.notifier).set(reservations);
-      setState(() => _reservations = reservations);
+    fetchTheater(theater_id: _selectedShowing!.theaterId).then((theater) {
+      fetchReservationsForShowing(showing_id: _selectedShowing!.id).then((res) {
+        var reservations = (res as List).cast<Map<String, dynamic>>();
+        for (var table in theater['tables']) {
+          for (var seat in table['seats']) {
+            seat["status"] = getSeatStatus(seat, reservations, _cart);
+          }
+        }
+        AppState newState = _ss.state;
+        newState.theater = theater;
+        newState.reservations = reservations;
+        _ss.setState(newState);
+      });
+
+      //setState(() => _theater = theater);
     });
+    // Ask the API server for all the reservations for this showing.
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    _cart = ref.watch(cartProvider);
     print("cart is $_cart");
-    _film = ref.read(selectedFilmProvider) ?? Film()
-      ..id = _selected_showing!.filmId;
-    _reservations = ref.read(reservationsProvider);
-    _theater = ref.read(theaterProvider) ?? {"tables": []};
+    //print("theater is ${_theater}");
+    // _film = _selectedShowing?.film ?? Film()
+    //   ..id = _selectedShowing!.filmId;
 
-    print(_reservations);
     return Scaffold(
         appBar: AppBar(
           title: Text("Pick your seats"),
@@ -60,7 +67,7 @@ class _PickSeatsState extends ConsumerState<PickSeats> {
             padding: EdgeInsets.all(10.0),
             child: Stack(
               alignment: Alignment.topLeft,
-              children: _theater["tables"]
+              children: (_ss.state.theater ?? {"tables": []})["tables"]
                   .map<Widget>((table) => daamTable.Table(table: table))
                   .toList(),
             ),
@@ -70,13 +77,28 @@ class _PickSeatsState extends ConsumerState<PickSeats> {
           child: Icon(Icons.shopping_cart),
           // We're going to eventually need to put showing and table in the cart
           onPressed: () {
-            _cart.add({"table_number": 10, "seat_number": 1, "price": 10.75});
-            _cart.add({"table_number": 10, "seat_number": 2, "price": 10.75});
-            _cart.add({"table_number": 10, "seat_number": 3, "price": 10.75});
-            _cart.add({"table_number": 10, "seat_number": 4, "price": 10.75});
-            ref.read(cartProvider.notifier).set(_cart);
+            // _state.cart
+            //     ?.add({"table_number": 10, "seat_number": 1, "price": 10.75});
+            // _state.cart
+            //     ?.add({"table_number": 10, "seat_number": 2, "price": 10.75});
+            // _state.cart
+            //     ?.add({"table_number": 10, "seat_number": 3, "price": 10.75});
+            // _state.cart
+            //     ?.add({"table_number": 10, "seat_number": 4, "price": 10.75});
+
             Navigator.pushNamed(context, '/checkout');
           },
         ));
+  }
+
+  SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
+      List<Map<String, dynamic>> cart) {
+    bool seatIsReserved =
+        reservations.any((reservation) => reservation['seat_id'] == seat['id']);
+    if (seatIsReserved) return SeatStatus.reserved;
+    bool seatIsInCart =
+        cart.any((heldSeat) => heldSeat['seat_id'] == seat['id']);
+    if (seatIsInCart) return SeatStatus.inCart;
+    return SeatStatus.available;
   }
 }

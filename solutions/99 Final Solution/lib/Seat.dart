@@ -1,43 +1,45 @@
-import 'package:daam/state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:daam/state/Seat.dart';
 import 'package:flutter/material.dart';
-import 'providers/reservationsProvider.dart';
+import 'state/AppState.dart';
+import 'state/SuperState.dart';
 
-class Seat extends ConsumerStatefulWidget {
+class Seat extends StatefulWidget {
   final Map<String, dynamic> seat;
 
   Seat({Key? key, required Map<String, dynamic> this.seat}) : super(key: key);
 
   @override
-  ConsumerState<Seat> createState() => _SeatState();
+  State<Seat> createState() => _SeatState();
 }
 
-class _SeatState extends ConsumerState<Seat> {
-  SeatStatus _status = SeatStatus.available;
+class _SeatState extends State<Seat> {
+  late SuperState _ss;
+  // SeatStatus _status = SeatStatus.available;
   Color _seatColor = Colors.blue;
-  late List<Map<String, dynamic>> _reservations;
+  //late List<Map<String, dynamic>> _reservations;
   late List<Map<String, dynamic>> _cart;
+
   @override
-  void initState() {
-    _reservations = ref.read(reservationsProvider);
-    _cart = ref.read(
-        cartProvider); // watch because we're changing the cart by adding to it and removing from it.
-    setState(() {
-      _status = getSeatStatus(widget.seat, _reservations, _cart);
-      switch (_status) {
-        case SeatStatus.reserved:
-          _seatColor = Colors.grey;
-          break;
-        case SeatStatus.inCart:
-          _seatColor = Colors.red;
-          break;
-        default:
-          _seatColor = Colors.blue;
-      }
-      print(_status);
-    });
-    super.initState();
+  void didChangeDependencies() {
+    _ss = SuperState.of(context);
+    // assert(_ss.state.reservations != null,
+    //     "Reservations should never be null here");
+    _cart = _ss.state.cart;
+    // setState(() {
+    //   // _status = getSeatStatus(widget.seat, _ss.state.reservations!, _cart);
+    switch (widget.seat["status"]) {
+      case SeatStatus.reserved:
+        _seatColor = Colors.grey;
+        break;
+      case SeatStatus.inCart:
+        _seatColor = Colors.red;
+        break;
+      default:
+        _seatColor = Colors.blue;
+    }
+    //   print(_status);
+    // });
+    super.didChangeDependencies();
   }
 
   @override
@@ -57,19 +59,12 @@ class _SeatState extends ConsumerState<Seat> {
       ),
       onTap: () {
         print('Adding seat ${widget.seat["id"]} to the cart.');
-        ref.read(cartProvider.notifier).set([..._cart, widget.seat]);
+        AppState newState = _ss.state;
+        List<Map<String, dynamic>> newCart = _cart;
+        newCart.add(widget.seat);
+        newState.cart = newCart;
+        _ss.setState(newState);
       },
     );
-  }
-
-  SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
-      List<Map<String, dynamic>> cart) {
-    bool seatIsReserved = _reservations
-        .any((reservation) => reservation['seat_id'] == seat['id']);
-    if (seatIsReserved) return SeatStatus.reserved;
-    bool seatIsInCart =
-        cart.any((heldSeat) => heldSeat['seat_id'] == seat['id']);
-    if (seatIsInCart) return SeatStatus.inCart;
-    return SeatStatus.available;
   }
 }

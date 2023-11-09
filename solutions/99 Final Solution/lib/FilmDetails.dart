@@ -1,37 +1,37 @@
+import 'package:daam/state/AppState.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'state.dart';
-import 'state/Film.dart';
 import 'ShowingTimes.dart';
-import 'providers/showingsProvider.dart';
+import 'state/SuperState.dart';
 
-class FilmDetails extends ConsumerStatefulWidget {
+class FilmDetails extends StatefulWidget {
   const FilmDetails({Key? key}) : super(key: key);
 
   @override
   _FilmDetailsState createState() => _FilmDetailsState();
 }
 
-class _FilmDetailsState extends ConsumerState<FilmDetails> {
-  Film _film = Film();
-  DateTime selected_date = DateTime.now();
+class _FilmDetailsState extends State<FilmDetails> {
+  String? email;
+  late AppState _state;
 
   @override
-  void initState() {
-    super.initState();
-    // Read the currently selected film from state.
-    _film = ref.read(selectedFilmProvider) ?? Film();
-    // Read the currently selected date. Use today if no date has been selected yet.
-    selected_date =
-        ref.read(selectedDateProvider) ?? DateTime.now().add(Duration(days: 2));
-    fetchFilm(id: _film.id).then((f) => setState(() {
-          ref.read(selectedFilmProvider.notifier).set(f);
-        }));
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _state = SuperState.of(context).state;
+
+    // Get the entire file from the film ID
+    // Read the currently selected film ID from state.
+    assert(_state.selectedFilm?.id != null,
+        "Selected film ID should never be null at this point");
+    fetchFilm(id: _state.selectedFilm!.id)
+        .then((f) => setState(() => _state.selectedFilm = f));
   }
 
   @override
   Widget build(BuildContext context) {
-    _film = ref.read(selectedFilmProvider) ?? Film();
+    AppState state = SuperState.of(context).state;
+    email = state.customer?.email;
     return Scaffold(
       appBar: AppBar(
         title: Text("Film Details"),
@@ -44,32 +44,34 @@ class _FilmDetailsState extends ConsumerState<FilmDetails> {
               ? Axis.vertical
               : Axis.horizontal,
           children: [
-            Image.network("http://localhost:3008/" + (_film.poster_path ?? "")),
+            Image.network("http://localhost:3008/" +
+                (_state.selectedFilm!.poster_path ?? "")),
             Column(
               children: [
+                Text("Data: $email"),
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: ShowingTimes(
-                    film: _film,
-                    selected_date: selected_date,
+                    film: _state.selectedFilm!,
+                    selected_date: _state.selectedDate,
                   ),
                 ),
                 Container(
                     padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_film.title ?? "")),
+                    child: Text(_state.selectedFilm?.title ?? "")),
                 Container(
                     padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_film.tagline ?? "")),
+                    child: Text(_state.selectedFilm?.tagline ?? "")),
                 Container(
                     padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_film.homepage ?? "")),
+                    child: Text(_state.selectedFilm?.homepage ?? "")),
                 Container(
                     padding: EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_film.overview ?? "")),
+                    child: Text(_state.selectedFilm?.overview ?? "")),
                 Container(
                   padding: EdgeInsets.only(top: 5, bottom: 5),
                   child: Text(
-                      "Rating: ${_film.vote_average}/10 ${_film.vote_count} votes"),
+                      "Rating: ${_state.selectedFilm?.vote_average}/10 ${_state.selectedFilm?.vote_count} votes"),
                 ),
               ],
             ),

@@ -1,15 +1,17 @@
+import 'package:daam/state/AppState.dart';
+import 'package:daam/state/SuperState.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'state.dart';
 
-class Checkout extends ConsumerStatefulWidget {
+class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
 }
 
-class _CheckoutState extends ConsumerState<Checkout> {
+class _CheckoutState extends State<Checkout> {
+  late SuperState _ss;
   String? _firstName;
   String? _lastName;
   String? _email;
@@ -26,26 +28,10 @@ class _CheckoutState extends ConsumerState<Checkout> {
   };
 
   @override
-  void initState() {
-    // Get the cart from state
-    _cart = ref.read(cartProvider);
-    super.initState();
-  }
-
-  void _checkout() {
-    if (_key.currentState == null) return;
-
-    if (!_key.currentState!.validate()) return;
-
-    _key.currentState!.save();
-
-    buyTickets(purchase: _purchase).then((res) {
-      // Response will have an array of ticket numbers.
-      print("success!");
-      Navigator.pushNamed(context, "/ticket");
-    }).catchError((err) {
-      print("Error purchasing. $err");
-    });
+  void didChangeDependencies() {
+    _ss = SuperState.of(context);
+    _cart = _ss.state.cart;
+    super.didChangeDependencies();
   }
 
   List<TableRow> _makeTableRows() {
@@ -81,6 +67,28 @@ class _CheckoutState extends ConsumerState<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+    AppState state = SuperState.of(context).state;
+    _email = state.customer?.email;
+
+    void _checkout() {
+      if (_key.currentState == null) return;
+
+      if (!_key.currentState!.validate()) return;
+
+      _key.currentState!.save();
+
+      buyTickets(purchase: _purchase).then((res) {
+        // Response will have an array of ticket numbers.
+        print("success!");
+        Navigator.pushNamed(context, "/ticket");
+      }).catchError((err) {
+        print("Error purchasing. $err");
+      });
+      setState(() {
+        state.customer!.email = _email;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Check out"),
@@ -90,6 +98,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Text("Email: $_email"),
               const Text("Checkout"),
               const Text("Your cart"),
               Container(
@@ -118,6 +127,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       ),
                       TextFormField(
                         onChanged: (val) => _email = val,
+                        initialValue: _email,
                         validator: (val) =>
                             RegExp(r"^\w+@\w+\.\w+$").hasMatch(val ?? "")
                                 ? null
@@ -132,7 +142,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                         onSaved: (val) => _purchase["phone"] = val,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
-                            labelText: "Phone (option)",
+                            labelText: "Phone (optional)",
                             hintText: "xxx-xxx-xxxx"),
                       ),
                       TextFormField(

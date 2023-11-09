@@ -1,19 +1,22 @@
 import 'package:daam/ShowingTimes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'state.dart';
 import 'state/Film.dart';
+import 'state/AppState.dart';
+import 'state/SuperState.dart';
 
-class FilmBrief extends ConsumerWidget {
+class FilmBrief extends StatelessWidget {
   final Film film;
   const FilmBrief({required this.film, Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    DateTime _selectedDate = ref.watch(selectedDateProvider);
+  Widget build(BuildContext context) {
+    SuperState _ss = SuperState.of(context);
+    AppState _state = _ss.state;
+
     return GestureDetector(
       onTap: () {
-        ref.read(selectedFilmProvider.notifier).set(film);
+        _state.selectedFilm = film;
+        //TODO: Write to state
         Navigator.pushNamed(context, '/film');
       },
       child: Padding(
@@ -42,7 +45,7 @@ class FilmBrief extends ConsumerWidget {
                   ),
                   ShowingTimes(
                     film: film,
-                    selected_date: _selectedDate,
+                    selected_date: _state.selectedDate,
                   ),
                 ]),
               ),

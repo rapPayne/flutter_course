@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'state.dart';
 import 'Checkout.dart';
 import 'FilmDetails.dart';
 import 'Landing.dart';
 import 'PickSeats.dart';
 import 'Ticket.dart';
-import 'providers/showingsProvider.dart';
+import 'state/SuperState.dart';
+import 'state/AppState.dart';
 
-void main() => runApp(ProviderScope(child: MyApp()));
+void main() => runApp(MyApp());
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ref) {
-    return Consumer(builder: (context, watch, _) {
-      return MaterialApp(
-        title: 'Reservations - Dinner And A Movie',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        initialRoute: "/",
-        routes: {
-          "/": (ctx) => Landing(),
-          "/film": (ctx) => FilmDetails(),
-          "/pickseats": (ctx) => PickSeats(),
-          "/checkout": (ctx) => Checkout(),
-          "/ticket": (ctx) => Ticket(),
-        },
-      );
-    }); // <-- ... and this
+  Widget build(BuildContext context) {
+    Customer customer = Customer()..email = "rap@creator.net";
+    AppState state = AppState();
+    state.customer = customer;
+    return SuperStateWidget(
+        state: state,
+        child:
+            // Consumer(builder: (context, watch, _) {
+            //   return
+            MaterialApp(
+          title: 'Reservations - Dinner And A Movie',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: "/",
+          routes: {
+            "/": (ctx) => Landing(),
+            "/film": (ctx) => FilmDetails(),
+            "/pickseats": (ctx) => PickSeats(),
+            "/checkout": (ctx) => Checkout(),
+            "/ticket": (ctx) => Ticket(),
+          },
+        )
+        //}),
+        ); // <-- ... and this
   }
 }
 // FilmDetails(

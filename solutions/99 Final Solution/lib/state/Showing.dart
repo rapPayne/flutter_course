@@ -2,7 +2,7 @@ import 'Film.dart';
 import '../state.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class Showing {
   Showing();
@@ -29,8 +29,9 @@ Future<List<Showing>> fetchShowings(
     {required int film_id, required DateTime date}) {
   String url =
       "${getBaseUrl()}/api/showings/$film_id/${DateFormat('yyyy-MM-dd').format(date)}";
-  return http
-      .get(Uri.parse(url))
+  return get(Uri.parse(url))
+      // return http
+      //     .get(Uri.parse(url))
       .then((res) => jsonDecode(res.body))
       .then((res) => Showing.showingsFromJson(res));
 }
