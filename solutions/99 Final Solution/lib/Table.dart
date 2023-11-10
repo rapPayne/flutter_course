@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Seat.dart';
+import 'seat.dart';
 
 class Table extends StatelessWidget {
   final Map table;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Checkout.dart';
-import 'FilmDetails.dart';
-import 'Landing.dart';
-import 'PickSeats.dart';
-import 'Ticket.dart';
+import 'checkout.dart';
+import 'film_details.dart';
+import 'landing.dart';
+import 'pick_seats.dart';
+import 'ticket.dart';
 import 'state/SuperState.dart';
 import 'state/AppState.dart';
 

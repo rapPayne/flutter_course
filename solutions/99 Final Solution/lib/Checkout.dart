@@ -98,7 +98,6 @@ class _CheckoutState extends State<Checkout> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Email: $_email"),
               const Text("Checkout"),
               const Text("Your cart"),
               Container(

@@ -2,8 +2,8 @@ import 'package:daam/state/SuperState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
 import 'state/Film.dart';
-import 'DatePicker.dart';
-import 'FilmBrief.dart';
+import 'date_picker.dart';
+import 'film_brief.dart';
 
 class Landing extends StatefulWidget {
   const Landing({Key? key}) : super(key: key);

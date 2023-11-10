@@ -1,7 +1,7 @@
 import 'package:daam/state/AppState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
-import 'ShowingTimes.dart';
+import 'showing_times.dart';
 import 'state/SuperState.dart';
 
 class FilmDetails extends StatefulWidget {

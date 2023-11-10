@@ -1,4 +1,4 @@
-import 'package:daam/ShowingTimes.dart';
+import 'package:daam/showing_times.dart';
 import 'package:flutter/material.dart';
 import 'state/Film.dart';
 import 'state/AppState.dart';

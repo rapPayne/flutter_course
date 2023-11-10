@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'state.dart';
 import 'state/Showing.dart';
 import 'state/Repository.dart';
-import 'Table.dart' as daamTable;
+import 'table.dart' as daamTable;
 import 'state/Seat.dart';
 
 class PickSeats extends StatefulWidget {
