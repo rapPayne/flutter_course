@@ -12,7 +12,6 @@ class FilmDetails extends StatefulWidget {
 }
 
 class _FilmDetailsState extends State<FilmDetails> {
-  String? email;
   late AppState _state;
 
   @override
@@ -30,8 +29,6 @@ class _FilmDetailsState extends State<FilmDetails> {
 
   @override
   Widget build(BuildContext context) {
-    AppState state = SuperState.of(context).state;
-    email = state.customer?.email;
     return Scaffold(
       appBar: AppBar(
         title: Text("Film Details"),
@@ -48,7 +45,6 @@ class _FilmDetailsState extends State<FilmDetails> {
                 (_state.selectedFilm!.poster_path ?? "")),
             Column(
               children: [
-                Text("Data: $email"),
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: ShowingTimes(

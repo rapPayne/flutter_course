@@ -1,5 +1,6 @@
 import 'package:daam/state/AppState.dart';
 import 'package:daam/state/Film.dart';
+import 'package:daam/state/Repository.dart';
 import 'package:daam/state/SuperState.dart';
 import 'state/Showing.dart';
 import 'package:flutter/material.dart';

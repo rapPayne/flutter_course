@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
             // Consumer(builder: (context, watch, _) {
             //   return
             MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Reservations - Dinner And A Movie',
           theme: ThemeData(
             primarySwatch: Colors.blue,

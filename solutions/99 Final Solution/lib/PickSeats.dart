@@ -3,7 +3,7 @@ import 'package:daam/state/SuperState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
 import 'state/Showing.dart';
-import 'state/Reservation.dart';
+import 'state/Repository.dart';
 import 'Table.dart' as daamTable;
 import 'state/Seat.dart';
 
