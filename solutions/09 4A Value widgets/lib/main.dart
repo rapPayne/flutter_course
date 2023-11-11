@@ -1,4 +1,4 @@
-import 'package:daam/checkout.dart';
+//import 'package:daam/checkout.dart';
 import 'package:daam/landing.dart';
 import 'package:flutter/material.dart';
 

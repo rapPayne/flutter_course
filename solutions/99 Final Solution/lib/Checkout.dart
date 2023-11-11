@@ -103,144 +103,142 @@ class _CheckoutState extends State<Checkout> {
               Container(
                 child: Table(children: _makeTableRows()),
               ),
-              Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  key: _key,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        onChanged: (val) => _firstName = val,
-                        validator: (val) => (val ?? "").length > 0
-                            ? null
-                            : "First name is required",
-                        onSaved: (val) => _purchase["firstName"] = val,
-                        decoration: InputDecoration(labelText: "First name"),
-                      ),
-                      TextFormField(
-                        onChanged: (val) => _lastName = val,
-                        validator: (val) => (val ?? "").length > 0
-                            ? null
-                            : "Last name is required",
-                        onSaved: (val) => _purchase["lastName"] = val,
-                        decoration: InputDecoration(labelText: "Last name"),
-                      ),
-                      TextFormField(
-                        onChanged: (val) => _email = val,
-                        initialValue: _email,
-                        validator: (val) =>
-                            RegExp(r"^\w+@\w+\.\w+$").hasMatch(val ?? "")
-                                ? null
-                                : "That isn't a valid email",
-                        onSaved: (val) => _purchase["email"] = val,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                            labelText: "Email", hintText: "you@yourEmail.com"),
-                      ),
-                      TextFormField(
-                        onChanged: (val) => _phone = val,
-                        onSaved: (val) => _purchase["phone"] = val,
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                            labelText: "Phone (optional)",
-                            hintText: "xxx-xxx-xxxx"),
-                      ),
-                      TextFormField(
-                        onChanged: (val) => _creditCardNumber = val,
-                        onSaved: (val) => _purchase["creditCardNumber"] = val,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            labelText: "Credit card number",
-                            hintText: "nnnn nnnn nnnn nnnn"),
-                      ),
-                      TextFormField(
-                        onChanged: (val) => _CVV = val,
-                        onSaved: (val) => _purchase["CVV"] = val,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(labelText: "CVV"),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: DropdownButton<String>(
-                                onChanged: (val) =>
-                                    setState(() => _expiryMonth = val),
-                                value: _expiryMonth,
-                                items: <DropdownMenuItem<String>>[
-                                  DropdownMenuItem<String>(
-                                    child: Text("Jan"),
-                                    value: "01",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Feb"),
-                                    value: "02",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Mar"),
-                                    value: "03",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Apr"),
-                                    value: "04",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("May"),
-                                    value: "05",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Jun"),
-                                    value: "06",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Jul"),
-                                    value: "07",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Aug"),
-                                    value: "08",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Sep"),
-                                    value: "09",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Oct"),
-                                    value: "10",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Nov"),
-                                    value: "11",
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    child: Text("Dec"),
-                                    value: "12",
-                                  ),
-                                ]),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: DropdownButton<String>(
-                              value: _expiryYear,
-                              onChanged: (val) =>
-                                  setState(() => _expiryYear = val),
-                              items: ["2024", "2025", "2026", "2027"]
-                                  .map<DropdownMenuItem<String>>((y) =>
-                                      DropdownMenuItem(
-                                          child: Text(y), value: y))
-                                  .toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
+              _makeCheckoutForm(),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.payment), onPressed: _checkout),
+    );
+  }
+
+  Widget _makeCheckoutForm() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: _key,
+      child: Column(
+        children: [
+          TextFormField(
+            onChanged: (val) => _firstName = val,
+            validator: (val) =>
+                (val ?? "").length > 0 ? null : "First name is required",
+            onSaved: (val) => _purchase["firstName"] = val,
+            decoration: InputDecoration(labelText: "First name"),
+          ),
+          TextFormField(
+            onChanged: (val) => _lastName = val,
+            validator: (val) =>
+                (val ?? "").length > 0 ? null : "Last name is required",
+            onSaved: (val) => _purchase["lastName"] = val,
+            decoration: InputDecoration(labelText: "Last name"),
+          ),
+          TextFormField(
+            onChanged: (val) => _email = val,
+            initialValue: _email,
+            validator: (val) => RegExp(r"^\w+@\w+\.\w+$").hasMatch(val ?? "")
+                ? null
+                : "That isn't a valid email",
+            onSaved: (val) => _purchase["email"] = val,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                labelText: "Email", hintText: "you@yourEmail.com"),
+          ),
+          TextFormField(
+            onChanged: (val) => _phone = val,
+            onSaved: (val) => _purchase["phone"] = val,
+            keyboardType: TextInputType.phone,
+            decoration: InputDecoration(
+                labelText: "Phone (optional)", hintText: "xxx-xxx-xxxx"),
+          ),
+          TextFormField(
+            onChanged: (val) => _creditCardNumber = val,
+            onSaved: (val) => _purchase["creditCardNumber"] = val,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+                labelText: "Credit card number",
+                hintText: "nnnn nnnn nnnn nnnn"),
+          ),
+          TextFormField(
+            onChanged: (val) => _CVV = val,
+            onSaved: (val) => _purchase["CVV"] = val,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: "CVV"),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: DropdownButton<String>(
+                    onChanged: (val) => setState(() => _expiryMonth = val),
+                    value: _expiryMonth,
+                    items: <DropdownMenuItem<String>>[
+                      DropdownMenuItem<String>(
+                        child: Text("Jan"),
+                        value: "01",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Feb"),
+                        value: "02",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Mar"),
+                        value: "03",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Apr"),
+                        value: "04",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("May"),
+                        value: "05",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Jun"),
+                        value: "06",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Jul"),
+                        value: "07",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Aug"),
+                        value: "08",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Sep"),
+                        value: "09",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Oct"),
+                        value: "10",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Nov"),
+                        value: "11",
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text("Dec"),
+                        value: "12",
+                      ),
+                    ]),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: DropdownButton<String>(
+                  value: _expiryYear,
+                  onChanged: (val) => setState(() => _expiryYear = val),
+                  items: ["2024", "2025", "2026", "2027"]
+                      .map<DropdownMenuItem<String>>(
+                          (y) => DropdownMenuItem(child: Text(y), value: y))
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
