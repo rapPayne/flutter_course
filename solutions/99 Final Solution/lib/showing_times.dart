@@ -61,7 +61,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
     List<Widget> textWidgets = <Widget>[];
     for (int i = 0; i < showings.length; i++) {
       DateTime showingTime = showings[i].showingTime;
-      String timeString = new DateFormat.jm().format(showingTime.toLocal());
+      String timeString = DateFormat.jm().format(showingTime.toLocal());
       var textWidget = TextButton(
         child: Text(timeString),
         onPressed: () {

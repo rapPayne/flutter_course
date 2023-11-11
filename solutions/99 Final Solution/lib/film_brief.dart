@@ -1,4 +1,5 @@
 import 'package:daam/showing_times.dart';
+import 'package:daam/state.dart';
 import 'package:flutter/material.dart';
 import 'state/Film.dart';
 import 'state/AppState.dart';
@@ -23,8 +24,7 @@ class FilmBrief extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           children: [
-            Image.network("http://localhost:3008${film.poster_path}",
-                height: 100),
+            Image.network('${getBaseUrl()}/${film.poster_path}', height: 100),
             Expanded(
               child: Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
