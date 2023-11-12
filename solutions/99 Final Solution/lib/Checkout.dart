@@ -18,7 +18,7 @@ class _CheckoutState extends State<Checkout> {
   String? _phone;
   String? _creditCardNumber;
   String? _CVV;
-  String? _expiryMonth = "01";
+  String? _expiryMonth;
   String? _expiryYear;
   List<Map<String, dynamic>> _cart = [];
   GlobalKey<FormState> _key = GlobalKey();
