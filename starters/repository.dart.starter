@@ -47,6 +47,10 @@ Future<List<Film>> fetchFilms() {
           ..voteAverage = f['vote_average']
           ..voteCount = f['vote_count'])
         .toList();
+  }).catchError((err) {
+    print("Problem fetching films!");
+    print(err);
+    return <Film>[];
   });
 }
 
