@@ -144,6 +144,9 @@ class _CheckoutState extends State<Checkout> {
           DropdownButtonFormField(
             value: _expiryMonth,
             items: _expiryMonths,
+            decoration: const InputDecoration(
+              label: Text("Expiry month"),
+            ),
             onChanged: (val) => setState(() => _expiryMonth = val),
             onSaved: (val) => _purchase["expiryMonth"] = val,
             validator: (val) => _validateExpiry(),
@@ -151,6 +154,9 @@ class _CheckoutState extends State<Checkout> {
           DropdownButtonFormField(
             value: _expiryYear,
             items: _makeExpiryYears(),
+            decoration: const InputDecoration(
+              label: Text("Expiry year"),
+            ),
             onChanged: (val) => setState(() => _expiryYear = val),
             onSaved: (val) => _purchase["expiryYear"] = val,
             validator: (val) => _validateExpiry(),
