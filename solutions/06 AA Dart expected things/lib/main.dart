@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this, avoid_print
+
 import 'package:flutter/material.dart';
 import 'state/repository.dart';
 import 'state/film.dart';
@@ -33,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _counter = 0;
   List<Film> _films = [Film()];
   List<dynamic> _showings = [];
 

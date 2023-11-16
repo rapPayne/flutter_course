@@ -17,7 +17,7 @@ class PickSeats extends StatefulWidget {
 class _PickSeatsState extends State<PickSeats> {
   late List<Map<String, dynamic>> _cart;
   Showing? _selectedShowing;
-  List<Map<String, dynamic>> _reservations = [];
+  //List<Map<String, dynamic>> _reservations = [];
   var selected_date = DateTime.now();
   late SuperState _ss;
 

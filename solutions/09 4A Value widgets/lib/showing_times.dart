@@ -30,6 +30,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
     return Column(
       children: [
         Text("Showing times for $selectedDateString for ${widget.film.title}"),
+        // ignore: avoid_unnecessary_containers
         Container(
           child: Column(
             children: _showings

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, unnecessary_this
+
 class Film {
   int id = 0;
   String title = "";

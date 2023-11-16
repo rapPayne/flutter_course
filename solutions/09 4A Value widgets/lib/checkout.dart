@@ -14,7 +14,7 @@ class _CheckoutState extends State<Checkout> {
       appBar: AppBar(
         title: const Text("Checkout"),
       ),
-      body: Column(
+      body: const Column(
         children: [
           Text("Checkout"),
           Text("Cart will go here"),
@@ -22,7 +22,7 @@ class _CheckoutState extends State<Checkout> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.payment),
+        child: const Icon(Icons.payment),
         onPressed: () => print("You pressed the FAB"),
       ),
     );

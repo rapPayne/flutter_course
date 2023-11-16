@@ -12,11 +12,16 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   late SuperState _ss;
+  // ignore: unused_field
   String? _firstName;
+  // ignore: unused_field
   String? _lastName;
   String? _email;
+  // ignore: unused_field
   String? _phone;
+  // ignore: unused_field
   String? _creditCardNumber;
+  // ignore: unused_field
   String? _CVV;
   String? _expiryMonth;
   String? _expiryYear;
