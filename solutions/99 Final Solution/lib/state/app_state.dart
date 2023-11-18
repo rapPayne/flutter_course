@@ -1,4 +1,4 @@
-import 'Showing.dart';
+import 'showing.dart';
 import 'Film.dart';
 
 class AppState {
@@ -27,7 +27,7 @@ class Customer {
 }
 
 class CreditCard {
-  String? PAN;
+  String? pan;
   int? expiryMonth;
   int? expiryYear;
 }

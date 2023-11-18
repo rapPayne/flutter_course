@@ -21,13 +21,13 @@ final showingsProvider = StateProvider((_) => <dynamic>[]);
 String getBaseUrl({String port = "3007"}) {
   // android 10.0.2.2 via AVD
   // android 10.0.3.2 via Genymotion
-  String _baseUrl = "http://127.0.0.1:$port";
+  String baseUrl = "http://127.0.0.1:$port";
   if (kIsWeb)
-    return _baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
+    return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
   if (Platform.isAndroid)
     return "http://10.0.2.2:$port";
   else
-    return _baseUrl;
+    return baseUrl;
 }
 
 // Fetch films using a strongly-typed class

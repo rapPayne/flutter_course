@@ -1,12 +1,12 @@
-import 'package:daam/state/Seat.dart';
+import 'package:daam/state/seat.dart';
 import 'package:flutter/material.dart';
-import 'state/AppState.dart';
-import 'state/SuperState.dart';
+import 'state/app_state.dart';
+import 'state/superState.dart';
 
 class Seat extends StatefulWidget {
   final Map<String, dynamic> seat;
 
-  Seat({Key? key, required Map<String, dynamic> this.seat}) : super(key: key);
+  const Seat({Key? key, required this.seat}) : super(key: key);
 
   @override
   State<Seat> createState() => _SeatState();
@@ -58,7 +58,6 @@ class _SeatState extends State<Seat> {
         ]),
       ),
       onTap: () {
-        print('Adding seat ${widget.seat["id"]} to the cart.');
         AppState newState = _ss.state;
         List<Map<String, dynamic>> newCart = _cart;
         newCart.add(widget.seat);

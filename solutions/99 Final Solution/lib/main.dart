@@ -4,12 +4,14 @@ import 'film_details.dart';
 import 'landing.dart';
 import 'pick_seats.dart';
 import 'ticket.dart';
-import 'state/SuperState.dart';
-import 'state/AppState.dart';
+import 'state/superState.dart';
+import 'state/app_state.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Customer customer = Customer()..email = "rap@creator.net";
@@ -28,11 +30,11 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: "/",
           routes: {
-            "/": (ctx) => Landing(),
-            "/film": (ctx) => FilmDetails(),
-            "/pickseats": (ctx) => PickSeats(),
-            "/checkout": (ctx) => Checkout(),
-            "/ticket": (ctx) => Ticket(),
+            "/": (ctx) => const Landing(),
+            "/film": (ctx) => const FilmDetails(),
+            "/pickseats": (ctx) => const PickSeats(),
+            "/checkout": (ctx) => const Checkout(),
+            "/ticket": (ctx) => const Ticket(),
           },
         )
         //}),

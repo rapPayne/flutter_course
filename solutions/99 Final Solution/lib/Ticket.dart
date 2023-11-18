@@ -4,7 +4,7 @@ class Ticket extends StatefulWidget {
   const Ticket({Key? key}) : super(key: key);
 
   @override
-  _TicketState createState() => _TicketState();
+  State<Ticket> createState() => _TicketState();
 }
 
 class _TicketState extends State<Ticket> {
@@ -12,10 +12,11 @@ class _TicketState extends State<Ticket> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Your Ticket"),
+          title: const Text("Your Ticket"),
         ),
+        // ignore: avoid_unnecessary_containers
         body: Container(
-          child: Text("Ticket"),
+          child: const Text("Ticket"),
         ));
   }
 }

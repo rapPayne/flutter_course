@@ -3,7 +3,7 @@ import 'seat.dart';
 
 class Table extends StatelessWidget {
   final Map table;
-  const Table({Key? key, required Map this.table}) : super(key: key);
+  const Table({Key? key, required this.table}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class Table extends StatelessWidget {
             alignment: Alignment.center,
             width: 30.0 * (table["seats"] as List).length,
             height: 30.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.all(Radius.circular(15))),
             child: Text("Table ${table["table_number"]}"),

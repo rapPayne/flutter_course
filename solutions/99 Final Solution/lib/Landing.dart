@@ -1,4 +1,4 @@
-import 'package:daam/state/SuperState.dart';
+import 'package:daam/state/superState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
 import 'state/Film.dart';
@@ -9,7 +9,7 @@ class Landing extends StatefulWidget {
   const Landing({Key? key}) : super(key: key);
 
   @override
-  _LandingState createState() => _LandingState();
+  State<Landing> createState() => _LandingState();
 }
 
 class _LandingState extends State<Landing> {
@@ -31,6 +31,7 @@ class _LandingState extends State<Landing> {
       setState(() {});
     });
     // TODO: may not be needed?
+    // ignore: avoid_print
     print("Landing changed dependencies");
     super.didChangeDependencies();
   }
@@ -43,14 +44,14 @@ class _LandingState extends State<Landing> {
           Row(
             children: [
               Image.asset("assets/daam.png", height: 75, fit: BoxFit.cover),
-              Text("Dinner And A Movie"),
+              const Text("Dinner And A Movie"),
             ],
           ),
-          Text(
+          const Text(
               "Tap a movie below to see its details. Then pick a date to see showtimes."),
-          DatePicker(),
+          const DatePicker(),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: films == null
                   ? []

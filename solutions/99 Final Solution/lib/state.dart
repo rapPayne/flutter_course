@@ -89,15 +89,17 @@ String getBaseUrl({String port = "3008"}) {
   // android 10.0.3.2 via Genymotion
   // iOS via iPhone Simulator http://localhost:$port
   // web
-  //String _baseUrl = "http://127.0.0.1:$port";
-  String _baseUrl = "http://localhost:$port";
-  if (kIsWeb)
-    return _baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
+  //String baseUrl = "http://127.0.0.1:$port";
+  String baseUrl = "http://localhost:$port";
+  if (kIsWeb) {
+    return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
+  }
   if (Platform.isMacOS) return "http://localhost:$port";
-  if (Platform.isAndroid)
+  if (Platform.isAndroid) {
     return "http://10.0.2.2:$port";
-  else
-    return _baseUrl;
+  } else {
+    return baseUrl;
+  }
 }
 
 // Fetch films using a strongly-typed class
@@ -118,8 +120,8 @@ Future<Film> fetchFilm({required int id}) {
 }
 
 // Fetch a theater
-Future<Map<String, dynamic>> fetchTheater({required int theater_id}) {
-  String url = "${getBaseUrl()}/api/theaters/$theater_id";
+Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
+  String url = "${getBaseUrl()}/api/theaters/$theaterId";
   return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
@@ -136,16 +138,16 @@ Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
   int showingId = purchase["showing_id"];
 
   String url = "${getBaseUrl()}/api/reservations";
-  List<Future<dynamic>> _futures = [];
-  final _payment_key = "temp_${Random().nextInt(2140000000)}";
-  for (int seat_id in seats) {
-    Map<String, dynamic> _body = {
+  List<Future<dynamic>> futures = [];
+  final paymentKey = "temp_${Random().nextInt(2140000000)}";
+  for (int seatId in seats) {
+    Map<String, dynamic> body = {
       "showing_id": showingId.toString(),
-      "seat_id": seat_id.toString(),
+      "seat_id": seatId.toString(),
       "user_id": 1.toString(),
-      "payment_key": _payment_key,
+      "payment_key": paymentKey,
     };
-    _futures.add(http.post(Uri.parse(url), body: _body));
+    futures.add(http.post(Uri.parse(url), body: body));
   }
-  return Future.wait(_futures);
+  return Future.wait(futures);
 }

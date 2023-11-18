@@ -14,7 +14,7 @@ String getBaseUrl({String port = "3008"}) {
   // android 10.0.3.2 via Genymotion
   // iOS via iPhone Simulator http://localhost:$port
   // web
-  //String _baseUrl = "http://127.0.0.1:$port";
+  //String baseUrl = "http://127.0.0.1:$port";
   String baseUrl = "http://localhost:$port";
   if (kIsWeb) {
     return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.

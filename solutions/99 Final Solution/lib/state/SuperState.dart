@@ -43,11 +43,10 @@ class SuperStateWidget extends StatefulWidget {
   final Widget child;
   final dynamic state;
 
-  SuperStateWidget(
-      {Key? key, required Widget this.child, required dynamic this.state})
+  SuperStateWidget({Key? key, required this.child, required this.state})
       : super(key: key) {
     superStateInheritedWidget =
-        _SuperStateInheritedWidget(child: child, state: state);
+        _SuperStateInheritedWidget(state: state, child: child);
     superStateObject = SuperState.create(state: state);
   }
 
@@ -64,6 +63,7 @@ class _SuperStateWidgetState extends State<SuperStateWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_print
     print('rebuilding...');
     //widget.superStateObject.addListener(_modelChanged);
     return widget.superStateInheritedWidget;
@@ -73,10 +73,6 @@ class _SuperStateWidgetState extends State<SuperStateWidget> {
   void dispose() {
     //widget.superStateObject.removeListener(_modelChanged);
     super.dispose();
-  }
-
-  void _modelChanged() {
-    setState(() {});
   }
 }
 

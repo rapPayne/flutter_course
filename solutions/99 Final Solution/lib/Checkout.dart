@@ -1,5 +1,5 @@
-import 'package:daam/state/AppState.dart';
-import 'package:daam/state/SuperState.dart';
+import 'package:daam/state/app_state.dart';
+import 'package:daam/state/superState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
 
@@ -7,7 +7,7 @@ class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
 
   @override
-  _CheckoutState createState() => _CheckoutState();
+  State<Checkout> createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
@@ -22,12 +22,12 @@ class _CheckoutState extends State<Checkout> {
   // ignore: unused_field
   String? _creditCardNumber;
   // ignore: unused_field
-  String? _CVV;
+  String? _cvv;
   String? _expiryMonth;
   String? _expiryYear;
   List<Map<String, dynamic>> _cart = [];
-  GlobalKey<FormState> _key = GlobalKey();
-  Map<String, dynamic> _purchase = {
+  final GlobalKey<FormState> _key = GlobalKey();
+  final Map<String, dynamic> _purchase = {
     "seats": [1, 2, 3],
     "showing_id": 1,
   };
@@ -43,7 +43,7 @@ class _CheckoutState extends State<Checkout> {
     List<TableRow> rows = _cart
         .map((item) => TableRow(children: [
               Text('Table ${item['table_number']} Seat ${item['seat_number']}'),
-              Text(''),
+              const Text(''),
               Text('${item['price']}'),
             ]))
         .toList();
@@ -52,18 +52,18 @@ class _CheckoutState extends State<Checkout> {
     double tax = subtotal * 0.0825;
     rows.addAll([
       TableRow(children: [
-        Text(''),
-        Text('Subtotal:'),
+        const Text(''),
+        const Text('Subtotal:'),
         Text(subtotal.toString()),
       ]),
       TableRow(children: [
-        Text(''),
-        Text('Tax:'),
+        const Text(''),
+        const Text('Tax:'),
         Text(tax.toString()),
       ]),
       TableRow(children: [
-        Text(''),
-        Text('Total:'),
+        const Text(''),
+        const Text('Total:'),
         Text((subtotal + tax).toString()),
       ]),
     ]);
@@ -75,7 +75,7 @@ class _CheckoutState extends State<Checkout> {
     AppState state = SuperState.of(context).state;
     _email = state.customer?.email;
 
-    void _checkout() {
+    void checkout() {
       if (_key.currentState == null) return;
 
       if (!_key.currentState!.validate()) return;
@@ -84,9 +84,9 @@ class _CheckoutState extends State<Checkout> {
 
       buyTickets(purchase: _purchase).then((res) {
         // Response will have an array of ticket numbers.
-        print("success!");
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
+        // ignore: avoid_print
         print("Error purchasing. $err");
       });
       setState(() {
@@ -96,25 +96,23 @@ class _CheckoutState extends State<Checkout> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Check out"),
+        title: const Text("Check out"),
       ),
       body: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         child: SingleChildScrollView(
           child: Column(
             children: [
               const Text("Checkout"),
               const Text("Your cart"),
-              Container(
-                child: Table(children: _makeTableRows()),
-              ),
+              Table(children: _makeTableRows()),
               _makeCheckoutForm(),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.payment), onPressed: _checkout),
+          onPressed: checkout, child: const Icon(Icons.payment)),
     );
   }
 
@@ -127,16 +125,16 @@ class _CheckoutState extends State<Checkout> {
           TextFormField(
             onChanged: (val) => _firstName = val,
             validator: (val) =>
-                (val ?? "").length > 0 ? null : "First name is required",
+                (val ?? "").isNotEmpty ? null : "First name is required",
             onSaved: (val) => _purchase["firstName"] = val,
-            decoration: InputDecoration(labelText: "First name"),
+            decoration: const InputDecoration(labelText: "First name"),
           ),
           TextFormField(
             onChanged: (val) => _lastName = val,
             validator: (val) =>
-                (val ?? "").length > 0 ? null : "Last name is required",
+                (val ?? "").isNotEmpty ? null : "Last name is required",
             onSaved: (val) => _purchase["lastName"] = val,
-            decoration: InputDecoration(labelText: "Last name"),
+            decoration: const InputDecoration(labelText: "Last name"),
           ),
           TextFormField(
             onChanged: (val) => _email = val,
@@ -146,97 +144,97 @@ class _CheckoutState extends State<Checkout> {
                 : "That isn't a valid email",
             onSaved: (val) => _purchase["email"] = val,
             keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "Email", hintText: "you@yourEmail.com"),
           ),
           TextFormField(
             onChanged: (val) => _phone = val,
             onSaved: (val) => _purchase["phone"] = val,
             keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "Phone (optional)", hintText: "xxx-xxx-xxxx"),
           ),
           TextFormField(
             onChanged: (val) => _creditCardNumber = val,
             onSaved: (val) => _purchase["creditCardNumber"] = val,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "Credit card number",
                 hintText: "nnnn nnnn nnnn nnnn"),
           ),
           TextFormField(
-            onChanged: (val) => _CVV = val,
+            onChanged: (val) => _cvv = val,
             onSaved: (val) => _purchase["CVV"] = val,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "CVV"),
+            decoration: const InputDecoration(labelText: "CVV"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
                 child: DropdownButton<String>(
                     onChanged: (val) => setState(() => _expiryMonth = val),
                     value: _expiryMonth,
-                    items: <DropdownMenuItem<String>>[
+                    items: const <DropdownMenuItem<String>>[
                       DropdownMenuItem<String>(
-                        child: Text("Jan"),
                         value: "01",
+                        child: Text("Jan"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Feb"),
                         value: "02",
+                        child: Text("Feb"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Mar"),
                         value: "03",
+                        child: Text("Mar"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Apr"),
                         value: "04",
+                        child: Text("Apr"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("May"),
                         value: "05",
+                        child: Text("May"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Jun"),
                         value: "06",
+                        child: Text("Jun"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Jul"),
                         value: "07",
+                        child: Text("Jul"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Aug"),
                         value: "08",
+                        child: Text("Aug"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Sep"),
                         value: "09",
+                        child: Text("Sep"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Oct"),
                         value: "10",
+                        child: Text("Oct"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Nov"),
                         value: "11",
+                        child: Text("Nov"),
                       ),
                       DropdownMenuItem<String>(
-                        child: Text("Dec"),
                         value: "12",
+                        child: Text("Dec"),
                       ),
                     ]),
               ),
               Container(
-                margin: EdgeInsets.only(left: 10),
+                margin: const EdgeInsets.only(left: 10),
                 child: DropdownButton<String>(
                   value: _expiryYear,
                   onChanged: (val) => setState(() => _expiryYear = val),
                   items: ["2024", "2025", "2026", "2027"]
                       .map<DropdownMenuItem<String>>(
-                          (y) => DropdownMenuItem(child: Text(y), value: y))
+                          (y) => DropdownMenuItem(value: y, child: Text(y)))
                       .toList(),
                 ),
               ),

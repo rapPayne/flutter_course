@@ -1,4 +1,4 @@
-import 'package:daam/state/Showing.dart';
+import 'package:daam/state/showing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class _SelectedShowingProvider extends StateNotifier<Showing?> {

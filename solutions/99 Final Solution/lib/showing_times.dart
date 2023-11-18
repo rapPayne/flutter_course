@@ -1,19 +1,19 @@
-import 'package:daam/state/AppState.dart';
+import 'package:daam/state/app_state.dart';
 import 'package:daam/state/Film.dart';
-import 'package:daam/state/Repository.dart';
-import 'package:daam/state/SuperState.dart';
-import 'state/Showing.dart';
+import 'package:daam/state/repository.dart';
+import 'package:daam/state/superState.dart';
+import 'state/showing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ShowingTimes extends StatefulWidget {
   final Film film;
-  final DateTime selected_date;
-  const ShowingTimes({required this.film, required this.selected_date})
-      : super();
+  final DateTime selectedDate;
+  const ShowingTimes({Key? key, required this.film, required this.selectedDate})
+      : super(key: key);
 
   @override
-  _ShowingTimesState createState() => _ShowingTimesState();
+  State<ShowingTimes> createState() => _ShowingTimesState();
 }
 
 class _ShowingTimesState extends State<ShowingTimes> {
@@ -26,8 +26,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
     //TODO: RAP, should this be in initState()? If initState() runs when
     // this is re-rendered, then yes b/c the film_id and date will be
     // different each time.
-    fetchShowings(film_id: widget.film.id, date: widget.selected_date)
-        .then((s) {
+    fetchShowings(filmId: widget.film.id, date: widget.selectedDate).then((s) {
       setState(() {
         _showings = s;
       });
@@ -38,7 +37,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
   @override
   Widget build(BuildContext context) {
     String selectedDateString =
-        new DateFormat.MMMMEEEEd().format(widget.selected_date);
+        DateFormat.MMMMEEEEd().format(widget.selectedDate);
 
     // This is the one causing the problem. When I Flex the row, it gets
     // infinite height. So Column needs to be constrained.
@@ -65,7 +64,6 @@ class _ShowingTimesState extends State<ShowingTimes> {
       var textWidget = TextButton(
         child: Text(timeString),
         onPressed: () {
-          print('Pressed $timeString');
           AppState newState = _ss.state;
           newState.selectedShowing = showings[i];
           _ss.setState(newState);
