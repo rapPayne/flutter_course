@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:state_sharing/main.dart';
+import 'package:state_sharing/app_state.dart';
+import 'package:state_sharing/superstate.dart';
 
 class A1 extends StatefulWidget {
   const A1({super.key});
@@ -11,49 +12,39 @@ class A1 extends StatefulWidget {
 }
 
 class _A1State extends State<A1> {
-  TopWidget? rootWidget;
-  FirstNameService? fns;
   String first = "";
   final TextEditingController _controller = TextEditingController();
-  @override
-  void didChangeDependencies() {
-    print("A1 dcd is running");
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
-    rootWidget = TopWidget.of(context);
-
-    fns = rootWidget!.firstNameService;
-    print("A1 builder is running");
-    assert(
-        rootWidget != null, "Inconceivable! RootWidget cannot be null here.");
-    first = rootWidget!.firstNameService.first;
+    String first =
+        (SuperState.of(context).appState.state as AppState).person?.first ?? '';
+    print("A1 builder is running. First is '$first'");
     _controller.text = first;
-    return ListenableBuilder(
-        listenable: fns!,
-        builder: (context, child) {
-          return Center(
-            child: Column(
-              children: [
-                Text("A1 $first"),
-                TextField(
-                  onChanged: (val) => first = val,
-                  decoration: const InputDecoration(
-                    labelText: "First name",
-                  ),
-                  controller: _controller,
-                ),
-                TextButton(
-                  onPressed: () =>
-                      rootWidget!.firstNameService.setFirst("Test"),
-                  child: const Text("Update"),
-                ),
-              ],
+    return Center(
+      child: Column(
+        children: [
+          Text("A1 $first"),
+          TextField(
+            onChanged: (val) => first = val,
+            decoration: const InputDecoration(
+              labelText: "First name",
             ),
-          );
-        });
+            controller: _controller,
+          ),
+          TextButton(
+            onPressed: () {
+              AppState oldState = SuperState.of(context).appState.state;
+              AppState newState = AppState(
+                  cart: oldState.cart,
+                  creditCard: oldState.creditCard,
+                  person: Person()..first = 'Set in A1 btn click');
+              SuperState.of(context).change(newState);
+            },
+            child: const Text("Update"),
+          ),
+        ],
+      ),
+    );
   }
 }

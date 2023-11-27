@@ -1,78 +1,31 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
+import 'package:state_sharing/a.dart';
+import 'package:state_sharing/app_state.dart';
+import 'package:state_sharing/superstate.dart';
 
-import 'a.dart';
-import 'b.dart';
-import 'c.dart';
-
-void main() {
-  runApp(const MyApp());
+void main(List<String> args) {
+  runApp(const Root());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Root extends StatefulWidget {
+  const Root({super.key});
 
+  @override
+  State<Root> createState() => _RootState();
+}
+
+class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
-    FirstNameService fns = FirstNameService();
-    fns.first = "Initial value set on instantiation in main.dart";
-    return TopWidget(
-      firstNameService: fns,
-      child: ListenableBuilder(
-          listenable: fns,
-          builder: (context, child) {
-            print("Main builder is running?");
+    AppState appState = AppState(person: Person()..first = 'Rap');
 
-            return MaterialApp(
-              title: 'State maintenance demo',
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
-              ),
-              routes: {
-                '/a': (ctx) => A(foo: fns.first),
-                '/b': (ctx) => const B(),
-                '/c': (ctx) => const C(),
-              },
-              initialRoute: '/a',
-            );
-          }),
+    return SuperState<AppState>(
+      initialState: appState,
+      child: MaterialApp(
+        theme: ThemeData.from(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.red)),
+        home: const A(),
+      ),
     );
-  }
-}
-
-class FirstNameService extends ChangeNotifier {
-  String first = "";
-
-  void setFirst(String newFirst) {
-    print("setFirst: $first => $newFirst");
-    first = newFirst;
-    notifyListeners();
-  }
-
-  @override
-  void notifyListeners() {
-    // TODO: implement notifyListeners
-    print("notifying listeners $hasListeners");
-    super.notifyListeners();
-  }
-}
-
-class TopWidget extends InheritedWidget {
-  final FirstNameService firstNameService;
-  const TopWidget(
-      {super.key, required this.firstNameService, required super.child});
-
-  @override
-  bool updateShouldNotify(covariant TopWidget oldWidget) {
-    return true;
-  }
-
-  static TopWidget of(BuildContext context) {
-    TopWidget? result = context.dependOnInheritedWidgetOfExactType<TopWidget>();
-    assert(result != null,
-        "No RootWidget found. Did you forget to wrap your main widget with one?");
-    return result!;
   }
 }
