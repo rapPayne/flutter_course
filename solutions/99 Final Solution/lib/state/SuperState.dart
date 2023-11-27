@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 /// To use this
 /// 1) pub get package
-/// 2) import 'package:SuperState.dart'; Wherever needed.
+/// 2) import 'package:superstate.dart'; Wherever needed.
 ///
 /// In main ...
 ///
-/// 3) Create your AppState class with any sub-classes you like.
-/// class AppState { String? prop1; prop2?: SomeClass; } class SomeClass { etc. }
+/// 3) Author your AppState class with any sub-classes you like.
+/// class AppState { String? prop1; SomeClass?: prop2; } class SomeClass { etc. }
 /// 4) Instantiate your initial AppState object .
 /// AppState _state = AppState()..prop1='foo'..prop2=SomeClass();
 /// 5) Wrap your main widget with SuperStateWidget.
 /// build(context) {
 /// return SuperStateWidget<AppState>(
-///  state: _state;
+///  initialState: _state;
 ///  child: Text("hello world")
 /// );}
 ///
@@ -22,139 +22,87 @@ import 'package:flutter/material.dart';
 /// To read a state variable
 /// class SomeWidget extends Stateful/StatelessWidget {
 ///  build(context) {
-///   SuperState<AppState> _ss = SuperState.of(context); ???
-///   AppState _localStateCopy = _ss.state;
-///   String prop1 = _localStateCopy.prop1;
-///   SomeClass foo = _localStateCopy.prop2;
+///   AppState state = SuperState.of(context).appState.state;
+///   String prop1 = state.prop1;
+///   SomeClass foo = state.prop2;
 ///  }
 /// }
 ///
 /// To update a state variable and have it re-render with these values:
-/// SuperState<AppState> _ss = SuperState.of(context);
-/// _ss.setState({...oldState, prop1: "newString", prop2: newObject});
-
-/// The Widget wrapper class
+/// AppState newState = AppState();
+/// // Set the properties of your new state object however you like.
+/// SuperState.of(context).change(newState));
 ///
-/// @param child The child widget that will be displayed
-/// @param state User-defined and user-provided state object
-class SuperStateWidget extends StatefulWidget {
-  late final SuperState superStateObject;
-  late final _SuperStateInheritedWidget superStateInheritedWidget;
-  final Widget child;
-  final dynamic state;
+/// SuperState is the Root Widget
+class SuperState<T> extends StatefulWidget {
+  SuperState({
+    super.key,
+    required this.initialState,
+    required this.child,
+  }) : stateWrapper = StateWrapper<T>(state: initialState);
 
-  SuperStateWidget({Key? key, required this.child, required this.state})
-      : super(key: key) {
-    superStateInheritedWidget =
-        _SuperStateInheritedWidget(state: state, child: child);
-    superStateObject = SuperState.create(state: state);
+  final T initialState;
+  final StateWrapper<T> stateWrapper;
+  final Widget child;
+
+  /// Gets a copy of the user's state object.
+  static SuperStateState of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_SuperStateInheritedWidget>()!
+        .stateWidget;
   }
 
   @override
-  State<SuperStateWidget> createState() => _SuperStateWidgetState();
+  State<SuperState> createState() => SuperStateState();
 }
 
-class _SuperStateWidgetState extends State<SuperStateWidget> {
+/// Allows the user to mutate data and see the rerendered results.
+class SuperStateState<T> extends State<SuperState> {
+  late StateWrapper<T> stateWrapper;
+
   @override
   void initState() {
-    // TODO: set up the object (with accessors), the notifier
+    stateWrapper = widget.stateWrapper as StateWrapper<T>;
     super.initState();
+  }
+
+  void change(T newState) {
+    setState(() {
+      stateWrapper = StateWrapper<T>(state: newState);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: avoid_print
-    print('rebuilding...');
-    //widget.superStateObject.addListener(_modelChanged);
-    return widget.superStateInheritedWidget;
-  }
-
-  @override
-  void dispose() {
-    //widget.superStateObject.removeListener(_modelChanged);
-    super.dispose();
+    return _SuperStateInheritedWidget(
+      stateWidget: this,
+      state: stateWrapper,
+      child: widget.child,
+    );
   }
 }
 
-/// The root class exposed. All access to state will be done through this widget.
-///
-///
-class SuperState extends ChangeNotifier {
-  // Static things
-  /// The singleton instance. Internally it is of type dynamic but externally is of type T.
-  static SuperState? singletonInstance;
-
-  static SuperState create({required dynamic state}) {
-    assert(SuperState.singletonInstance == null,
-        'Create has already been called. It should only ever be called once, and only by the framework, never by the user.');
-    // Call the private constructor and put it in static singletonInstance.
-    SuperState.singletonInstance = new SuperState._(state: state);
-    return SuperState.singletonInstance!;
-  }
-
-  /// Way to get access to the inheritedWidget. It is on the
-  /// SuperState object since the inheritedWidget is encapsulated
-  /// and never needs to be accessed directly.
-  static SuperState? maybeOf(BuildContext context) {
-    context.dependOnInheritedWidgetOfExactType<_SuperStateInheritedWidget>();
-    return SuperState.singletonInstance;
-  }
-
-  /// Way to get access to the inheritedWidget. It is on the
-  /// SuperState object since the inheritedWidget is encapsulated
-  /// and never needs to be accessed directly.
-  static SuperState of(BuildContext context) {
-    final SuperState? result = SuperState.maybeOf(context);
-    assert(result != null, "No SuperState widget found in context");
-    return result!;
-  }
-
-  // Instance things
-  dynamic state;
-  // late _SuperStateNotifier superStateNotifier;
-
-  SuperState._({required dynamic this.state});
-
-  void setState(dynamic newState) {
-    state = newState;
-    notifyListeners();
-  }
-}
-
-/// Another private class that exists to notify descendents to
-/// rerender themselves because something has changed.
-// class _SuperStateNotifier extends ChangeNotifier {
-//   dynamic state;
-
-//   // Update the state here
-//   void setState(dynamic newState) {
-//     state = newState;
-//     notifyListeners();
-//   }
-
-//   // /// Simply calls notifyListeners().
-//   // void notify() {
-//   //   notifyListeners();
-//   // }
-// }
-
+/// Hidden. User never sees this.
 class _SuperStateInheritedWidget extends InheritedWidget {
-  final dynamic state;
-  _SuperStateInheritedWidget({
-    Key? key,
-    required Widget child,
+  const _SuperStateInheritedWidget({
+    required this.stateWidget,
     required this.state,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
+
+  final SuperStateState stateWidget;
+  final StateWrapper state;
 
   @override
   bool updateShouldNotify(_SuperStateInheritedWidget oldWidget) {
-    return oldWidget.state != state;
+    return state != oldWidget.state;
   }
+}
 
-  static _SuperStateInheritedWidget of(BuildContext context) {
-    _SuperStateInheritedWidget? result = context
-        .dependOnInheritedWidgetOfExactType<_SuperStateInheritedWidget>();
-    assert(result != null, "No SuperState widget found in context");
-    return result!;
-  }
+/// Holds a user-defined object<T> called state, which is the state of the app
+@immutable
+class StateWrapper<T> {
+  const StateWrapper({required this.state});
+
+  final T state;
 }

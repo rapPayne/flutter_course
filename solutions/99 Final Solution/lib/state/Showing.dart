@@ -1,4 +1,4 @@
-import 'Film.dart';
+import 'movie.dart';
 
 class Showing {
   Showing();
@@ -6,7 +6,7 @@ class Showing {
   late int filmId;
   late int theaterId;
   late DateTime showingTime;
-  Film? film;
+  Movie? film;
 
   Showing.fromJson(Map<String, dynamic> json) {
     id = json['id'];

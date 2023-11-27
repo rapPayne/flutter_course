@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'state.dart';
 
 class Checkout extends StatefulWidget {
-  const Checkout({Key? key}) : super(key: key);
+  const Checkout({super.key});
 
   @override
   State<Checkout> createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
-  late SuperState _ss;
   // ignore: unused_field
   String? _firstName;
   // ignore: unused_field
@@ -25,19 +24,12 @@ class _CheckoutState extends State<Checkout> {
   String? _cvv;
   String? _expiryMonth;
   String? _expiryYear;
-  List<Map<String, dynamic>> _cart = [];
+  final List<Map<String, dynamic>> _cart = [];
   final GlobalKey<FormState> _key = GlobalKey();
   final Map<String, dynamic> _purchase = {
     "seats": [1, 2, 3],
     "showing_id": 1,
   };
-
-  @override
-  void didChangeDependencies() {
-    _ss = SuperState.of(context);
-    _cart = _ss.state.cart;
-    super.didChangeDependencies();
-  }
 
   List<TableRow> _makeTableRows() {
     List<TableRow> rows = _cart
@@ -72,7 +64,7 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    AppState state = SuperState.of(context).state;
+    AppState state = SuperState.of(context).stateWrapper.state;
     _email = state.customer?.email;
 
     void checkout() {

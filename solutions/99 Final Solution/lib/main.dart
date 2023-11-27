@@ -10,15 +10,15 @@ import 'state/app_state.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     Customer customer = Customer()..email = "rap@creator.net";
-    AppState state = AppState();
+    AppState state = AppState()..customer = customer;
     state.customer = customer;
-    return SuperStateWidget(
-        state: state,
+    return SuperState<AppState>(
+        initialState: state,
         child:
             // Consumer(builder: (context, watch, _) {
             //   return

@@ -5,28 +5,18 @@ import 'package:intl/intl.dart'; // For days of the week
 // import 'state.dart';
 
 class DatePicker extends StatefulWidget {
-  const DatePicker({Key? key}) : super(key: key);
+  const DatePicker({super.key});
 
   @override
   State<DatePicker> createState() => _DatePickerState();
 }
 
 class _DatePickerState extends State<DatePicker> {
-  late SuperState _ss;
-
-  @override
-  void didChangeDependencies() {
-    // Get state
-    _ss = SuperState.of(context);
-    _ss.addListener(() {
-      setState(() {});
-    });
-    super.didChangeDependencies();
-  }
+  late AppState state;
 
   @override
   Widget build(BuildContext context) {
-    //print("selectedDate ${_state.selectedDate.toString()}");
+    state = SuperState.of(context).stateWrapper.state;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       children: _getDates(),
@@ -45,7 +35,7 @@ class _DatePickerState extends State<DatePicker> {
           // child: Flexible(
           child: Text(
             text,
-            style: date == _ss.state.selectedDate
+            style: date == state.selectedDate
                 ? const TextStyle(fontWeight: FontWeight.bold)
                 : const TextStyle(fontWeight: FontWeight.normal),
           ),
@@ -53,9 +43,7 @@ class _DatePickerState extends State<DatePicker> {
           //   flex: 1,
           // ),
           onPressed: () {
-            AppState newState = _ss.state;
-            newState.selectedDate = date;
-            _ss.setState(newState);
+            SuperState.of(context).change(state.copyWith(selectedDate: date));
           });
     }).toList();
   }

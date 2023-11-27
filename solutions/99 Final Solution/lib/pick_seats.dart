@@ -8,26 +8,26 @@ import 'table.dart' as daam_table;
 import 'state/seat.dart';
 
 class PickSeats extends StatefulWidget {
-  const PickSeats({Key? key}) : super(key: key);
+  const PickSeats({super.key});
 
   @override
   State<PickSeats> createState() => _PickSeatsState();
 }
 
 class _PickSeatsState extends State<PickSeats> {
+  late AppState _state;
   late List<Map<String, dynamic>> _cart;
   Showing? _selectedShowing;
   //List<Map<String, dynamic>> _reservations = [];
   var selectedDate = DateTime.now();
-  late SuperState _ss;
 
   @override
   void didChangeDependencies() {
-    _ss = SuperState.of(context);
-    _selectedShowing = _ss.state.selectedShowing;
+    _state = SuperState.of(context).stateWrapper.state as AppState;
+    _selectedShowing = _state.selectedShowing;
     assert(_selectedShowing != null,
         "When picking seats, the selected showing is null. This should never happen!");
-    _cart = _ss.state.cart;
+    _cart = _state.cart;
     // Ask the API server for all of the tables and seats for this theater.
     fetchTheater(theaterId: _selectedShowing!.theaterId).then((theater) {
       fetchReservationsForShowing(showingId: _selectedShowing!.id).then((res) {
@@ -37,24 +37,14 @@ class _PickSeatsState extends State<PickSeats> {
             seat["status"] = getSeatStatus(seat, reservations, _cart);
           }
         }
-        AppState newState = _ss.state;
-        newState.theater = theater;
-        newState.reservations = reservations;
-        _ss.setState(newState);
       });
-
-      //setState(() => _theater = theater);
+      SuperState.of(context).change(_state.copyWith(theater: theater));
     });
-    // Ask the API server for all the reservations for this showing.
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    //print("theater is ${_theater}");
-    // _film = _selectedShowing?.film ?? Film()
-    //   ..id = _selectedShowing!.filmId;
-
     return Scaffold(
         appBar: AppBar(
           title: const Text("Pick your seats"),
@@ -66,7 +56,7 @@ class _PickSeatsState extends State<PickSeats> {
             padding: const EdgeInsets.all(10.0),
             child: Stack(
               alignment: Alignment.topLeft,
-              children: (_ss.state.theater ?? {"tables": []})["tables"]
+              children: (_state.theater ?? {"tables": []})["tables"]
                   .map<Widget>((table) => daam_table.Table(table: table))
                   .toList(),
             ),

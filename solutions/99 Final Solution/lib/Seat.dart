@@ -6,14 +6,14 @@ import 'state/superState.dart';
 class Seat extends StatefulWidget {
   final Map<String, dynamic> seat;
 
-  const Seat({Key? key, required this.seat}) : super(key: key);
+  const Seat({super.key, required this.seat});
 
   @override
   State<Seat> createState() => _SeatState();
 }
 
 class _SeatState extends State<Seat> {
-  late SuperState _ss;
+  late AppState _state;
   // SeatStatus _status = SeatStatus.available;
   Color _seatColor = Colors.blue;
   //late List<Map<String, dynamic>> _reservations;
@@ -21,10 +21,8 @@ class _SeatState extends State<Seat> {
 
   @override
   void didChangeDependencies() {
-    _ss = SuperState.of(context);
-    // assert(_ss.state.reservations != null,
-    //     "Reservations should never be null here");
-    _cart = _ss.state.cart;
+    _state = SuperState.of(context).stateWrapper.state as AppState;
+    _cart = _state.cart;
     // setState(() {
     //   // _status = getSeatStatus(widget.seat, _ss.state.reservations!, _cart);
     switch (widget.seat["status"]) {
@@ -58,11 +56,9 @@ class _SeatState extends State<Seat> {
         ]),
       ),
       onTap: () {
-        AppState newState = _ss.state;
         List<Map<String, dynamic>> newCart = _cart;
         newCart.add(widget.seat);
-        newState.cart = newCart;
-        _ss.setState(newState);
+        SuperState.of(context).change(_state.copyWith(cart: newCart));
       },
     );
   }

@@ -1,11 +1,10 @@
 import 'package:daam/state/app_state.dart';
 import 'package:flutter/material.dart';
-import 'state.dart';
 import 'showing_times.dart';
 import 'state/superState.dart';
 
 class FilmDetails extends StatefulWidget {
-  const FilmDetails({Key? key}) : super(key: key);
+  const FilmDetails({super.key});
 
   @override
   State<FilmDetails> createState() => _FilmDetailsState();
@@ -15,20 +14,10 @@ class _FilmDetailsState extends State<FilmDetails> {
   late AppState _state;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _state = SuperState.of(context).state;
-
-    // Get the entire file from the film ID
-    // Read the currently selected film ID from state.
+  Widget build(BuildContext context) {
+    _state = SuperState.of(context).stateWrapper.state;
     assert(_state.selectedFilm?.id != null,
         "Selected film ID should never be null at this point");
-    fetchFilm(id: _state.selectedFilm!.id)
-        .then((f) => setState(() => _state.selectedFilm = f));
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Film Details"),

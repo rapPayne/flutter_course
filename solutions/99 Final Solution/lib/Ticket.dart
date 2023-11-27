@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Ticket extends StatefulWidget {
-  const Ticket({Key? key}) : super(key: key);
+  const Ticket({super.key});
 
   @override
   State<Ticket> createState() => _TicketState();

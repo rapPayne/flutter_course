@@ -1,5 +1,5 @@
 import 'package:daam/state/app_state.dart';
-import 'package:daam/state/Film.dart';
+import 'package:daam/state/movie.dart';
 import 'package:daam/state/repository.dart';
 import 'package:daam/state/superState.dart';
 import 'state/showing.dart';
@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ShowingTimes extends StatefulWidget {
-  final Film film;
+  final Movie film;
   final DateTime selectedDate;
-  const ShowingTimes({Key? key, required this.film, required this.selectedDate})
-      : super(key: key);
+  const ShowingTimes(
+      {super.key, required this.film, required this.selectedDate});
 
   @override
   State<ShowingTimes> createState() => _ShowingTimesState();
@@ -18,14 +18,11 @@ class ShowingTimes extends StatefulWidget {
 
 class _ShowingTimesState extends State<ShowingTimes> {
   List<Showing> _showings = [];
-  late SuperState _ss;
+  late AppState _state;
 
   @override
   void didChangeDependencies() {
-    _ss = SuperState.of(context);
-    //TODO: RAP, should this be in initState()? If initState() runs when
-    // this is re-rendered, then yes b/c the film_id and date will be
-    // different each time.
+    print("film: ${widget.film.id} date: ${widget.selectedDate}");
     fetchShowings(filmId: widget.film.id, date: widget.selectedDate).then((s) {
       setState(() {
         _showings = s;
@@ -36,6 +33,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
 
   @override
   Widget build(BuildContext context) {
+    _state = SuperState.of(context).stateWrapper.state as AppState;
     String selectedDateString =
         DateFormat.MMMMEEEEd().format(widget.selectedDate);
 
@@ -64,9 +62,8 @@ class _ShowingTimesState extends State<ShowingTimes> {
       var textWidget = TextButton(
         child: Text(timeString),
         onPressed: () {
-          AppState newState = _ss.state;
-          newState.selectedShowing = showings[i];
-          _ss.setState(newState);
+          SuperState.of(context)
+              .change(_state.copyWith(selectedShowing: showings[i]));
           Navigator.pushNamed(context, '/pickseats');
         },
       );

@@ -3,86 +3,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'state/Film.dart';
-
-// Cart
-class _CartNotifier extends StateNotifier<List<Map<String, dynamic>>> {
-  _CartNotifier() : super([]); // Passing in the initial value
-  void set(List<Map<String, dynamic>> cart) {
-    state = cart;
-  }
-}
-
-final cartProvider =
-    StateNotifierProvider<_CartNotifier, List<Map<String, dynamic>>>(
-        (ref) => _CartNotifier());
-
-// Holds all methods to update the Films list
-class _FilmsNotifier extends StateNotifier<List<Film>> {
-  _FilmsNotifier() : super(<Film>[]); // Passing in the initial value
-  void setAllFilms(List<Film> films) {
-    state = films;
-  }
-}
-
-final filmsProvider = StateNotifierProvider<_FilmsNotifier, List<Film>>(
-    (ref) => _FilmsNotifier());
-
-// Selected Date - defaults to today
-class _SelectedDateProvider extends StateNotifier<DateTime> {
-  _SelectedDateProvider() : super(DateTime.now());
-  void set(DateTime selectedDate) {
-    state = selectedDate;
-  }
-}
-
-final selectedDateProvider =
-    StateNotifierProvider<_SelectedDateProvider, DateTime>(
-        (ref) => _SelectedDateProvider());
-
-class _SelectedFilmProvider extends StateNotifier<Film?> {
-  _SelectedFilmProvider() : super(null);
-  void set(Film? film) {
-    state = film;
-  }
-}
-
-final selectedFilmProvider =
-    StateNotifierProvider<_SelectedFilmProvider, Film?>(
-        (ref) => _SelectedFilmProvider());
-
-class _ShowFilmDetailsProvider extends StateNotifier<bool> {
-  _ShowFilmDetailsProvider() : super(false);
-  void set(bool showFilmDetails) {
-    state = showFilmDetails;
-  }
-}
-
-final showFilmDetailsProvider =
-    StateNotifierProvider<_ShowFilmDetailsProvider, bool>(
-        (ref) => _ShowFilmDetailsProvider());
-
-class _TitleProvider extends StateNotifier<String> {
-  _TitleProvider() : super('Prestige Worldwide');
-  void set(String title) {
-    state = title;
-  }
-}
-
-final titleProvider =
-    StateNotifierProvider<_TitleProvider, String>((ref) => _TitleProvider());
-
-class _TheaterProvider extends StateNotifier<Map<String, dynamic>> {
-  _TheaterProvider() : super({});
-  void set(Map<String, dynamic> theater) {
-    state = theater;
-  }
-}
-
-final theaterProvider =
-    StateNotifierProvider<_TheaterProvider, Map<String, dynamic>>(
-        (ref) => _TheaterProvider());
+import 'state/movie.dart';
 
 String getBaseUrl({String port = "3008"}) {
   // android 10.0.2.2 via AVD
@@ -103,19 +24,19 @@ String getBaseUrl({String port = "3008"}) {
 }
 
 // Fetch films using a strongly-typed class
-Future<List<Film>> fetchFilms() {
+Future<List<Movie>> fetchFilms() {
   String url = "${getBaseUrl()}/api/films";
   return http.get(Uri.parse(url)).then((res) {
     List<dynamic> films = jsonDecode(res.body);
-    return films.map((f) => Film.fromJson(f)).toList();
+    return films.map((f) => Movie.fromJson(f)).toList();
   });
 }
 
 // Fetch one film by id.
-Future<Film> fetchFilm({required int id}) {
+Future<Movie> fetchFilm({required int id}) {
   String url = "${getBaseUrl()}/api/films/$id";
   return http.get(Uri.parse(url)).then((res) {
-    return Film.fromJson(jsonDecode(res.body));
+    return Movie.fromJson(jsonDecode(res.body));
   });
 }
 

@@ -1,39 +1,23 @@
-import 'package:daam/state/superState.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
-import 'state/Film.dart';
+import 'state/movie.dart';
 import 'date_picker.dart';
 import 'film_brief.dart';
 
 class Landing extends StatefulWidget {
-  const Landing({Key? key}) : super(key: key);
+  const Landing({super.key});
 
   @override
   State<Landing> createState() => _LandingState();
 }
 
 class _LandingState extends State<Landing> {
-  List<Film>? films;
-  late SuperState _ss;
+  List<Movie>? films;
 
   @override
   void initState() {
     fetchFilms().then((f) => setState(() => films = f));
-    //TODO: Write these films to SuperState
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // Get state
-    _ss = SuperState.of(context);
-    _ss.addListener(() {
-      setState(() {});
-    });
-    // TODO: may not be needed?
-    // ignore: avoid_print
-    print("Landing changed dependencies");
-    super.didChangeDependencies();
   }
 
   @override

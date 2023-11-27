@@ -1,23 +1,21 @@
 import 'package:daam/showing_times.dart';
 import 'package:daam/state.dart';
 import 'package:flutter/material.dart';
-import 'state/Film.dart';
+import 'state/movie.dart';
 import 'state/app_state.dart';
 import 'state/superState.dart';
 
 class FilmBrief extends StatelessWidget {
-  final Film film;
-  const FilmBrief({required this.film, Key? key}) : super(key: key);
+  final Movie film;
+  const FilmBrief({required this.film, super.key});
 
   @override
   Widget build(BuildContext context) {
-    SuperState ss = SuperState.of(context);
-    AppState state = ss.state;
+    AppState state = SuperState.of(context).stateWrapper.state;
 
     return GestureDetector(
       onTap: () {
-        state.selectedFilm = film;
-        //TODO: Write to state
+        SuperState.of(context).change(state.copyWith(selectedFilm: film));
         Navigator.pushNamed(context, '/film');
       },
       child: Padding(

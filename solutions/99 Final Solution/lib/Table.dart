@@ -3,7 +3,7 @@ import 'seat.dart';
 
 class Table extends StatelessWidget {
   final Map table;
-  const Table({Key? key, required this.table}) : super(key: key);
+  const Table({super.key, required this.table});
 
   @override
   Widget build(BuildContext context) {
