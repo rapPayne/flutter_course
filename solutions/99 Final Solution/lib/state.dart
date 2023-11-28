@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -46,29 +45,28 @@ Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
   return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
-/*
-TODO: This logic should be done on the server for security reasons.
-Move it there eventually. Add a firstName, lastName, etc to the 
-reservation. Also, the user should be logged in at 
-this point so get their int user_id also.
-*/
-// Make a purchase
-Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
-  // If these two don't exist, it'll throw and be caught on the outside.
-  List<int> seats = purchase["seats"];
-  int showingId = purchase["showing_id"];
+/// Purchase film tickets
+/// The purchase Map should look like this:
+/// {
+///   "showing_id": 100,
+///   "seats": [
+///     7,
+///     8,
+///     10,
+///     22
+///   ],
+///   "user_id": 10,
+///   "first_name": "Jo",
+///   "last_name": "Smith",
+///   "email": "jo.smith@gmail.com",
+///   "phone": "555-555-1234",
+///   "pan": "6011-0087-7345-4323",
+///   "expiry_month": 1,
+///   "expiry_year": 2025,
+///   "cvv": 123
+/// }
 
-  String url = "${getBaseUrl()}/api/reservations";
-  List<Future<dynamic>> futures = [];
-  final paymentKey = "temp_${Random().nextInt(2140000000)}";
-  for (int seatId in seats) {
-    Map<String, dynamic> body = {
-      "showing_id": showingId.toString(),
-      "seat_id": seatId.toString(),
-      "user_id": 1.toString(),
-      "payment_key": paymentKey,
-    };
-    futures.add(http.post(Uri.parse(url), body: body));
-  }
-  return Future.wait(futures);
+Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
+  String url = "${getBaseUrl()}/api/buytickets";
+  return http.post(Uri.parse(url), body: purchase);
 }

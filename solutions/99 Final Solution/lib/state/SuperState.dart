@@ -106,3 +106,13 @@ class StateWrapper<T> {
 
   final T state;
 }
+
+// Problems with SuperState
+// 1. If you call change() in a didChangeDependencies, it causes an
+//    infinite loop.
+//
+// 2. The getting of state idiom could be shorter. This is just unweildy:
+//    `SuperState.of(context).stateWrapper.state`
+//    It would be nicer if we could:
+//    `SuperState.of(context)` or `SuperState.of(context).state`
+//

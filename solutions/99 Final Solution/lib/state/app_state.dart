@@ -48,4 +48,5 @@ class CreditCard {
   String? pan;
   int? expiryMonth;
   int? expiryYear;
+  int? cvv;
 }

@@ -1,3 +1,4 @@
+import 'package:daam/state.dart';
 import 'package:daam/state/app_state.dart';
 import 'package:daam/state/movie.dart';
 import 'package:daam/state/repository.dart';
@@ -5,6 +6,7 @@ import 'package:daam/state/superState.dart';
 import 'state/showing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'state/seat.dart';
 
 class ShowingTimes extends StatefulWidget {
   final Movie film;
@@ -21,14 +23,13 @@ class _ShowingTimesState extends State<ShowingTimes> {
   late AppState _state;
 
   @override
-  void didChangeDependencies() {
-    print("film: ${widget.film.id} date: ${widget.selectedDate}");
+  void initState() {
     fetchShowings(filmId: widget.film.id, date: widget.selectedDate).then((s) {
       setState(() {
         _showings = s;
       });
     });
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override
@@ -61,9 +62,22 @@ class _ShowingTimesState extends State<ShowingTimes> {
       String timeString = DateFormat.jm().format(showingTime.toLocal());
       var textWidget = TextButton(
         child: Text(timeString),
-        onPressed: () {
-          SuperState.of(context)
-              .change(_state.copyWith(selectedShowing: showings[i]));
+        onPressed: () async {
+          SuperState.of(context).change(_state.copyWith());
+          // Ask the API server for all of the tables and seats for this theater.
+          var theater = await fetchTheater(theaterId: showings[i].theaterId);
+          var reservations =
+              (await fetchReservationsForShowing(showingId: showings[i].id)
+                      as List)
+                  .cast<Map<String, dynamic>>();
+          for (var table in theater['tables']) {
+            for (var seat in table['seats']) {
+              seat['table_number'] = table['table_number'];
+              seat['status'] = getSeatStatus(seat, reservations, _state.cart);
+            }
+          }
+          SuperState.of(context).change(
+              _state.copyWith(selectedShowing: showings[i], theater: theater));
           Navigator.pushNamed(context, '/pickseats');
         },
       );
@@ -71,4 +85,17 @@ class _ShowingTimesState extends State<ShowingTimes> {
     }
     return textWidgets;
   }
+}
+
+SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
+    List<Map<String, dynamic>> cart) {
+  bool seatIsInCart = cart.any((heldSeat) => heldSeat['id'] == seat['id']);
+  if (seatIsInCart) {
+    print("found a seat in the cart");
+    return SeatStatus.inCart;
+  }
+  bool seatIsReserved =
+      reservations.any((reservation) => reservation['seat_id'] == seat['id']);
+  if (seatIsReserved) return SeatStatus.reserved;
+  return SeatStatus.available;
 }

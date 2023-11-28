@@ -11,25 +11,17 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-  // ignore: unused_field
-  String? _firstName;
-  // ignore: unused_field
-  String? _lastName;
+  String? _first;
+  String? _last;
   String? _email;
-  // ignore: unused_field
   String? _phone;
-  // ignore: unused_field
-  String? _creditCardNumber;
-  // ignore: unused_field
+  String? _pan;
   String? _cvv;
   String? _expiryMonth;
   String? _expiryYear;
-  final List<Map<String, dynamic>> _cart = [];
+  final Map<String, dynamic> _purchase = {};
+  List<Map<String, dynamic>> _cart = [];
   final GlobalKey<FormState> _key = GlobalKey();
-  final Map<String, dynamic> _purchase = {
-    "seats": [1, 2, 3],
-    "showing_id": 1,
-  };
 
   List<TableRow> _makeTableRows() {
     List<TableRow> rows = _cart
@@ -65,25 +57,50 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
     AppState state = SuperState.of(context).stateWrapper.state;
+    assert(state.selectedShowing != null,
+        "Selected showing should never be null at this point");
+    _cart = state.cart;
+    _purchase["showing_id"] = state.selectedShowing!.id;
+    _purchase["seats"] = state.cart.map((seat) => seat["id"]).toList();
+    _first = state.customer?.first;
+    _last = state.customer?.last;
     _email = state.customer?.email;
+    _phone = state.customer?.phone;
+    _pan = state.customer?.creditCard?.pan;
+    _expiryMonth = state.customer?.creditCard?.expiryMonth.toString();
+    _expiryYear = state.customer?.creditCard?.expiryYear.toString();
+    _cvv = state.customer?.creditCard?.cvv.toString();
+    assert(state.selectedShowing != null,
+        "Selected Showing cannot be null in checkout.");
 
     void checkout() {
       if (_key.currentState == null) return;
-
       if (!_key.currentState!.validate()) return;
-
       _key.currentState!.save();
 
       buyTickets(purchase: _purchase).then((res) {
+        AppState newState = state.copyWith(cart: []);
+        SuperState.of(context).change(newState);
         // Response will have an array of ticket numbers.
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
         // ignore: avoid_print
         print("Error purchasing. $err");
       });
-      setState(() {
-        state.customer!.email = _email;
-      });
+
+      var creditCard = CreditCard()
+        ..cvv = int.tryParse(_cvv ?? "")
+        ..expiryMonth = int.tryParse(_expiryMonth ?? "")
+        ..expiryYear = int.tryParse(_expiryYear ?? "")
+        ..pan = _pan;
+      var customer = Customer()
+        ..creditCard = creditCard
+        ..email = _email
+        ..first = _first
+        ..last = _last
+        ..phone = _phone;
+      AppState newState = state.copyWith(customer: customer);
+      SuperState.of(context).change(newState);
     }
 
     return Scaffold(
@@ -104,7 +121,7 @@ class _CheckoutState extends State<Checkout> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: checkout, child: const Icon(Icons.payment)),
+          onPressed: () => checkout(), child: const Icon(Icons.payment)),
     );
   }
 
@@ -115,17 +132,17 @@ class _CheckoutState extends State<Checkout> {
       child: Column(
         children: [
           TextFormField(
-            onChanged: (val) => _firstName = val,
+            onChanged: (val) => _first = val,
             validator: (val) =>
                 (val ?? "").isNotEmpty ? null : "First name is required",
-            onSaved: (val) => _purchase["firstName"] = val,
+            onSaved: (val) => _purchase["first_name"] = val,
             decoration: const InputDecoration(labelText: "First name"),
           ),
           TextFormField(
-            onChanged: (val) => _lastName = val,
+            onChanged: (val) => _last = val,
             validator: (val) =>
                 (val ?? "").isNotEmpty ? null : "Last name is required",
-            onSaved: (val) => _purchase["lastName"] = val,
+            onSaved: (val) => _purchase["last_name"] = val,
             decoration: const InputDecoration(labelText: "Last name"),
           ),
           TextFormField(
@@ -147,8 +164,8 @@ class _CheckoutState extends State<Checkout> {
                 labelText: "Phone (optional)", hintText: "xxx-xxx-xxxx"),
           ),
           TextFormField(
-            onChanged: (val) => _creditCardNumber = val,
-            onSaved: (val) => _purchase["creditCardNumber"] = val,
+            onChanged: (val) => _pan = val,
+            onSaved: (val) => _purchase["pan"] = val,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 labelText: "Credit card number",
@@ -156,84 +173,98 @@ class _CheckoutState extends State<Checkout> {
           ),
           TextFormField(
             onChanged: (val) => _cvv = val,
-            onSaved: (val) => _purchase["CVV"] = val,
+            onSaved: (val) => _purchase["cvv"] = val,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(labelText: "CVV"),
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: DropdownButton<String>(
-                    onChanged: (val) => setState(() => _expiryMonth = val),
-                    value: _expiryMonth,
-                    items: const <DropdownMenuItem<String>>[
-                      DropdownMenuItem<String>(
-                        value: "01",
-                        child: Text("Jan"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "02",
-                        child: Text("Feb"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "03",
-                        child: Text("Mar"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "04",
-                        child: Text("Apr"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "05",
-                        child: Text("May"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "06",
-                        child: Text("Jun"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "07",
-                        child: Text("Jul"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "08",
-                        child: Text("Aug"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "09",
-                        child: Text("Sep"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "10",
-                        child: Text("Oct"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "11",
-                        child: Text("Nov"),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: "12",
-                        child: Text("Dec"),
-                      ),
-                    ]),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: DropdownButton<String>(
-                  value: _expiryYear,
-                  onChanged: (val) => setState(() => _expiryYear = val),
-                  items: ["2024", "2025", "2026", "2027"]
-                      .map<DropdownMenuItem<String>>(
-                          (y) => DropdownMenuItem(value: y, child: Text(y)))
-                      .toList(),
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(right: 10),
+              //   child:
+              // DropdownButtonFormField<String>(
+              //   onChanged: (val) => setState(() => _expiryMonth = val),
+              //   onSaved: (val) => _purchase["expiry_month"] = val,
+              //   value: _expiryMonth,
+              //   items: _expiryMonths,
+              // ),
+              // ),
+              // Container(
+              //   margin: const EdgeInsets.only(left: 10),
+              //   child: DropdownButtonFormField<String>(
+              //     value: _expiryYear,
+              //     onChanged: (val) => setState(() => _expiryYear = val),
+              //     onSaved: (val) => _purchase["expiry_month"] = val,
+              //     items: _makeExpiryYears(),
+              //   ),
+              // ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  final List<DropdownMenuItem<String>> _expiryMonths = [
+    const DropdownMenuItem(
+      value: "01",
+      child: Text("Jan"),
+    ),
+    const DropdownMenuItem(
+      value: "02",
+      child: Text("Feb"),
+    ),
+    const DropdownMenuItem(
+      value: "03",
+      child: Text("Mar"),
+    ),
+    const DropdownMenuItem(
+      value: "04",
+      child: Text("Apr"),
+    ),
+    const DropdownMenuItem(
+      value: "05",
+      child: Text("May"),
+    ),
+    const DropdownMenuItem(
+      value: "06",
+      child: Text("Jun"),
+    ),
+    const DropdownMenuItem(
+      value: "07",
+      child: Text("Jul"),
+    ),
+    const DropdownMenuItem(
+      value: "08",
+      child: Text("Aug"),
+    ),
+    const DropdownMenuItem(
+      value: "09",
+      child: Text("Sep"),
+    ),
+    const DropdownMenuItem(
+      value: "10",
+      child: Text("Oct"),
+    ),
+    const DropdownMenuItem(
+      value: "11",
+      child: Text("Nov"),
+    ),
+    const DropdownMenuItem(
+      value: "12",
+      child: Text("Dec"),
+    ),
+  ];
+
+  List<DropdownMenuItem<String>> _makeExpiryYears() {
+    int currentYear = DateTime.now().year;
+    return [
+      for (int year = currentYear; year <= currentYear + 4; year++)
+        DropdownMenuItem<String>(
+          value: year.toString(),
+          child: Text(year.toString()),
+        ),
+    ];
   }
 }

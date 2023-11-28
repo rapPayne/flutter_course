@@ -14,17 +14,11 @@ class Seat extends StatefulWidget {
 
 class _SeatState extends State<Seat> {
   late AppState _state;
-  // SeatStatus _status = SeatStatus.available;
   Color _seatColor = Colors.blue;
-  //late List<Map<String, dynamic>> _reservations;
-  late List<Map<String, dynamic>> _cart;
 
   @override
-  void didChangeDependencies() {
+  Widget build(BuildContext context) {
     _state = SuperState.of(context).stateWrapper.state as AppState;
-    _cart = _state.cart;
-    // setState(() {
-    //   // _status = getSeatStatus(widget.seat, _ss.state.reservations!, _cart);
     switch (widget.seat["status"]) {
       case SeatStatus.reserved:
         _seatColor = Colors.grey;
@@ -35,29 +29,44 @@ class _SeatState extends State<Seat> {
       default:
         _seatColor = Colors.blue;
     }
-    //   print(_status);
-    // });
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
+      child: SizedBox(
         width: 30,
         height: 30,
-        color: _seatColor,
         child: Stack(alignment: Alignment.center, children: [
-          // render seat.png
-          Image.asset("assets/seat.png"),
-          // LOOK HERE FOR ICONS: https://api.flutter.dev/flutter/material/Icons-class.html
-          //TODO: RAP: the weekend_outlined and weekend_rounded look like chairs. Also consider "person" and "portrait"
+          Icon(
+            Icons.weekend_rounded,
+            color: _seatColor,
+          ),
           Text(widget.seat["seat_number"].toString()),
         ]),
       ),
       onTap: () {
-        List<Map<String, dynamic>> newCart = _cart;
-        newCart.add(widget.seat);
+        List<Map<String, dynamic>> newCart = _state.cart;
+        switch (widget.seat["status"]) {
+          case SeatStatus.reserved:
+            return;
+          case SeatStatus.inCart:
+            newCart = newCart
+                .where((item) => item["id"] != widget.seat["id"])
+                .toList();
+            setState(() {
+              widget.seat["status"] = SeatStatus.available;
+            });
+            break;
+          case SeatStatus.available:
+            newCart.add({
+              ...widget.seat,
+              "showingId": _state.selectedShowing!.id,
+            });
+            setState(() {
+              widget.seat["status"] = SeatStatus.inCart;
+            });
+            break;
+          default:
+            throw Exception(
+                "Bad SeatStatus in Seat widget: ${widget.seat['status']}.");
+        }
         SuperState.of(context).change(_state.copyWith(cart: newCart));
       },
     );

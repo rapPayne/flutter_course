@@ -56,12 +56,6 @@ class SuperStateWidget extends StatefulWidget {
 
 class _SuperStateWidgetState extends State<SuperStateWidget> {
   @override
-  void initState() {
-    // TODO: set up the object (with accessors), the notifier
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // ignore: avoid_print
     print('rebuilding...');
