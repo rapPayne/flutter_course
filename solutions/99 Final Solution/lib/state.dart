@@ -4,6 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'state/movie.dart';
 
+/// Returns the proper root URL for the OS
+///
+/// For MacOS, you should also edit MacOS entitlements and add this to
+/// macos/Runner/DebugProfile.entitlements
+/// <key>com.apple.security.network.client</key>
+/// <true/>
 String getBaseUrl({String port = "3008"}) {
   // android 10.0.2.2 via AVD
   // android 10.0.3.2 via Genymotion
@@ -14,7 +20,7 @@ String getBaseUrl({String port = "3008"}) {
   if (kIsWeb) {
     return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
   }
-  if (Platform.isMacOS) return "http://localhost:$port";
+  if (Platform.isMacOS) return baseUrl;
   if (Platform.isAndroid) {
     return "http://10.0.2.2:$port";
   } else {
