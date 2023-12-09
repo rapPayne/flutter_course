@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         title: 'Random Giphy Viewer',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.light().copyWith(primary: Colors.red),
+          colorScheme: const ColorScheme.light().copyWith(primary: Colors.red),
         ),
         home: const DrawRandomGif());
   }

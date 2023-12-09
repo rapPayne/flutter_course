@@ -28,7 +28,7 @@ class _DrawRandomGifState extends State<DrawRandomGif> {
         onPressed: () {
           fetchGif();
         },
-        child: Icon(Icons.arrow_back_ios_new),
+        child: const Icon(Icons.arrow_back_ios_new),
       ),
     );
   }
@@ -37,7 +37,7 @@ class _DrawRandomGifState extends State<DrawRandomGif> {
     print("Go fetch new Gif");
     var apiKey = dotenv.get("giphyApiKey");
     String url =
-        'https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=&rating=g';
+        'https://api.giphy.com/v1/gifs/random?api_key=$apiKey&tag=&rating=g';
     get(Uri.parse(url)).then((response) {
       Map<String, dynamic> body = json.decode(response.body);
       setState(() {
