@@ -177,28 +177,27 @@ class _CheckoutState extends State<Checkout> {
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(labelText: "CVV"),
           ),
-          const Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Container(
-              //   margin: const EdgeInsets.only(right: 10),
-              //   child:
-              // DropdownButtonFormField<String>(
-              //   onChanged: (val) => setState(() => _expiryMonth = val),
-              //   onSaved: (val) => _purchase["expiry_month"] = val,
-              //   value: _expiryMonth,
-              //   items: _expiryMonths,
-              // ),
-              // ),
-              // Container(
-              //   margin: const EdgeInsets.only(left: 10),
-              //   child: DropdownButtonFormField<String>(
-              //     value: _expiryYear,
-              //     onChanged: (val) => setState(() => _expiryYear = val),
-              //     onSaved: (val) => _purchase["expiry_month"] = val,
-              //     items: _makeExpiryYears(),
-              //   ),
-              // ),
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: DropdownButtonFormField<String>(
+                  onChanged: (val) => setState(() => _expiryMonth = val),
+                  onSaved: (val) => _purchase["expiry_month"] = val,
+                  value: _expiryMonth,
+                  items: _expiryMonths,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                child: DropdownButtonFormField<String>(
+                  value: _expiryYear,
+                  onChanged: (val) => setState(() => _expiryYear = val),
+                  onSaved: (val) => _purchase["expiry_month"] = val,
+                  items: _makeExpiryYears(),
+                ),
+              ),
             ],
           ),
         ],

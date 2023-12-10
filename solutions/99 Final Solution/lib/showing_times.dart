@@ -76,8 +76,10 @@ class _ShowingTimesState extends State<ShowingTimes> {
               seat['status'] = getSeatStatus(seat, reservations, _state.cart);
             }
           }
+          // ignore: use_build_context_synchronously
           SuperState.of(context).change(
               _state.copyWith(selectedShowing: showings[i], theater: theater));
+          // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, '/pickseats');
         },
       );
