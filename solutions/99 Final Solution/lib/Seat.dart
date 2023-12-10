@@ -1,7 +1,9 @@
+import 'package:daam/state/global.dart';
 import 'package:daam/state/seat.dart';
+import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
-import 'state/app_state.dart';
-import 'state/superState.dart';
+// import 'state/app_state.dart';
+// import 'state/superState.dart';
 
 class Seat extends StatefulWidget {
   final Map<String, dynamic> seat;
@@ -13,12 +15,15 @@ class Seat extends StatefulWidget {
 }
 
 class _SeatState extends State<Seat> {
-  late AppState _state;
+  // late AppState _state;
   Color _seatColor = Colors.blue;
+  final List<Map<String, dynamic>> _cart =
+      global.get<List<Map<String, dynamic>>>('cart');
+  final Showing _selectedShowing = global.get<Showing>('selectedShowing');
 
   @override
   Widget build(BuildContext context) {
-    _state = SuperState.of(context).stateWrapper.state as AppState;
+    // _state = SuperState.of(context).stateWrapper.state as AppState;
     switch (widget.seat["status"]) {
       case SeatStatus.reserved:
         _seatColor = Colors.grey;
@@ -42,7 +47,7 @@ class _SeatState extends State<Seat> {
         ]),
       ),
       onTap: () {
-        List<Map<String, dynamic>> newCart = _state.cart;
+        List<Map<String, dynamic>> newCart = _cart;
         switch (widget.seat["status"]) {
           case SeatStatus.reserved:
             return;
@@ -57,7 +62,7 @@ class _SeatState extends State<Seat> {
           case SeatStatus.available:
             newCart.add({
               ...widget.seat,
-              "showingId": _state.selectedShowing!.id,
+              "showingId": _selectedShowing!.id,
             });
             setState(() {
               widget.seat["status"] = SeatStatus.inCart;
@@ -67,7 +72,7 @@ class _SeatState extends State<Seat> {
             throw Exception(
                 "Bad SeatStatus in Seat widget: ${widget.seat['status']}.");
         }
-        SuperState.of(context).change(_state.copyWith(cart: newCart));
+        global.set('cart', newCart);
       },
     );
   }

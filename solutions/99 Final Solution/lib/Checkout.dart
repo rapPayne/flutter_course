@@ -1,7 +1,8 @@
-import 'package:daam/state/app_state.dart';
-import 'package:daam/state/superState.dart';
+import 'package:daam/state/global.dart';
+import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
+import './state/customer.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -20,7 +21,11 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final Map<String, dynamic> _purchase = {};
-  List<Map<String, dynamic>> _cart = [];
+  final List<Map<String, dynamic>> _cart =
+      global.get<List<Map<String, dynamic>>>('cart');
+  Showing selectedShowing = global.get<Showing>("selectedShowing");
+  final Customer? _customer = global.maybeGet<Customer>('customer');
+
   final GlobalKey<FormState> _key = GlobalKey();
 
   List<TableRow> _makeTableRows() {
@@ -56,22 +61,16 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    AppState state = SuperState.of(context).stateWrapper.state;
-    assert(state.selectedShowing != null,
-        "Selected showing should never be null at this point");
-    _cart = state.cart;
-    _purchase["showing_id"] = state.selectedShowing!.id;
-    _purchase["seats"] = state.cart.map((seat) => seat["id"]).toList();
-    _first = state.customer?.first;
-    _last = state.customer?.last;
-    _email = state.customer?.email;
-    _phone = state.customer?.phone;
-    _pan = state.customer?.creditCard?.pan;
-    _expiryMonth = state.customer?.creditCard?.expiryMonth.toString();
-    _expiryYear = state.customer?.creditCard?.expiryYear.toString();
-    _cvv = state.customer?.creditCard?.cvv.toString();
-    assert(state.selectedShowing != null,
-        "Selected Showing cannot be null in checkout.");
+    _purchase["showing_id"] = selectedShowing.id;
+    _purchase["seats"] = _cart.map((seat) => seat["id"]).toList();
+    _first = _customer?.first;
+    _last = _customer?.last;
+    _email = _customer?.email;
+    _phone = _customer?.phone;
+    _pan = _customer?.creditCard?.pan;
+    _expiryMonth = _customer?.creditCard?.expiryMonth.toString();
+    _expiryYear = _customer?.creditCard?.expiryYear.toString();
+    _cvv = _customer?.creditCard?.cvv.toString();
 
     void checkout() {
       if (_key.currentState == null) return;
@@ -79,9 +78,9 @@ class _CheckoutState extends State<Checkout> {
       _key.currentState!.save();
 
       buyTickets(purchase: _purchase).then((res) {
-        AppState newState = state.copyWith(cart: []);
-        SuperState.of(context).change(newState);
-        // Response will have an array of ticket numbers.
+        // TODO: Send POST request to buyTickets(). Response will have an array of ticket numbers.
+        // Empty out the cart
+        global.set("cart", []);
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
         // ignore: avoid_print
@@ -99,8 +98,7 @@ class _CheckoutState extends State<Checkout> {
         ..first = _first
         ..last = _last
         ..phone = _phone;
-      AppState newState = state.copyWith(customer: customer);
-      SuperState.of(context).change(newState);
+      global.set("customer", customer);
     }
 
     return Scaffold(

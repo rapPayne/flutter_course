@@ -1,9 +1,10 @@
 import 'package:daam/showing_times.dart';
 import 'package:daam/state.dart';
+import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
 import 'state/movie.dart';
-import 'state/app_state.dart';
-import 'state/superState.dart';
+// import 'state/app_state.dart';
+// import 'state/superState.dart';
 
 class FilmBrief extends StatelessWidget {
   final Movie film;
@@ -11,11 +12,11 @@ class FilmBrief extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppState state = SuperState.of(context).stateWrapper.state;
-
+    DateTime selectedDate = global.get<DateTime>('selectedDate');
     return GestureDetector(
       onTap: () {
-        SuperState.of(context).change(state.copyWith(selectedFilm: film));
+        //SuperState.of(context).change(state.copyWith(selectedFilm: film));
+        global.set("selectedFilm", film);
         Navigator.pushNamed(context, '/film');
       },
       child: Padding(
@@ -43,7 +44,7 @@ class FilmBrief extends StatelessWidget {
                   ),
                   ShowingTimes(
                     film: film,
-                    selectedDate: state.selectedDate,
+                    selectedDate: selectedDate,
                   ),
                 ]),
               ),

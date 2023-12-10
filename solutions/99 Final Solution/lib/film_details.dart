@@ -1,7 +1,7 @@
-import 'package:daam/state/app_state.dart';
+import 'package:daam/state/global.dart';
+import 'package:daam/state/movie.dart';
 import 'package:flutter/material.dart';
 import 'showing_times.dart';
-import 'state/superState.dart';
 
 class FilmDetails extends StatefulWidget {
   const FilmDetails({super.key});
@@ -11,13 +11,15 @@ class FilmDetails extends StatefulWidget {
 }
 
 class _FilmDetailsState extends State<FilmDetails> {
-  late AppState _state;
+  // late AppState _state;
 
   @override
   Widget build(BuildContext context) {
-    _state = SuperState.of(context).stateWrapper.state;
-    assert(_state.selectedFilm?.id != null,
-        "Selected film ID should never be null at this point");
+    Movie selectedFilm = global.get<Movie>("selectedFilm");
+    DateTime selectedDate = global.get<DateTime>("selectedDate");
+
+    print("film is ${selectedFilm.title}");
+    //_state = SuperState.of(context).stateWrapper.state;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Film Details"),
@@ -30,36 +32,35 @@ class _FilmDetailsState extends State<FilmDetails> {
               ? Axis.vertical
               : Axis.horizontal,
           children: [
-            (_state.selectedFilm == null ||
-                    _state.selectedFilm!.posterPath!.isEmpty)
+            (selectedFilm.posterPath!.isEmpty)
                 ? Container()
                 : Image.network(
-                    "http://localhost:3008/${_state.selectedFilm!.posterPath}"),
+                    "http://localhost:3008/${selectedFilm.posterPath}"),
             Column(
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: ShowingTimes(
-                    film: _state.selectedFilm!,
-                    selectedDate: _state.selectedDate,
+                    film: selectedFilm,
+                    selectedDate: selectedDate,
                   ),
                 ),
                 Container(
                     padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_state.selectedFilm?.title ?? "")),
+                    child: Text(selectedFilm.title ?? "")),
                 Container(
                     padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_state.selectedFilm?.tagline ?? "")),
+                    child: Text(selectedFilm.tagline ?? "")),
                 Container(
                     padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_state.selectedFilm?.homepage ?? "")),
+                    child: Text(selectedFilm.homepage ?? "")),
                 Container(
                     padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(_state.selectedFilm?.overview ?? "")),
+                    child: Text(selectedFilm.overview ?? "")),
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 5),
                   child: Text(
-                      "Rating: ${_state.selectedFilm?.voteAverage}/10 ${_state.selectedFilm?.voteCount} votes"),
+                      "Rating: ${selectedFilm.voteAverage}/10 ${selectedFilm.voteCount} votes"),
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
-import 'package:daam/state/app_state.dart';
-import 'package:daam/state/superState.dart';
+// import 'package:daam/state/app_state.dart';
+// import 'package:daam/state/superState.dart';
+import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For days of the week
 
@@ -11,11 +12,9 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  late AppState state;
-
+  DateTime selectedDate = global.get<DateTime>("selectedDate");
   @override
   Widget build(BuildContext context) {
-    state = SuperState.of(context).stateWrapper.state;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       children: _getDates(),
@@ -34,7 +33,7 @@ class _DatePickerState extends State<DatePicker> {
           // child: Flexible(
           child: Text(
             text,
-            style: date == state.selectedDate
+            style: date == selectedDate
                 ? const TextStyle(fontWeight: FontWeight.bold)
                 : const TextStyle(fontWeight: FontWeight.normal),
           ),
@@ -42,7 +41,7 @@ class _DatePickerState extends State<DatePicker> {
           //   flex: 1,
           // ),
           onPressed: () {
-            SuperState.of(context).change(state.copyWith(selectedDate: date));
+            global.set("selectedDate", date);
           });
     }).toList();
   }

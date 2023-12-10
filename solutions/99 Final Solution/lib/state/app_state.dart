@@ -1,5 +1,6 @@
 import 'showing.dart';
 import 'movie.dart';
+import 'customer.dart';
 
 class AppState {
   List<Map<String, dynamic>> cart = [];
@@ -32,21 +33,3 @@ class AppState {
 
 DateTime now = DateTime.now();
 DateTime today = DateTime.utc(now.year, now.month, now.day);
-
-class Customer {
-  int? id;
-  String? username;
-  String? password;
-  String? first;
-  String? last;
-  String? phone;
-  String? email;
-  CreditCard? creditCard;
-}
-
-class CreditCard {
-  String? pan;
-  int? expiryMonth;
-  int? expiryYear;
-  int? cvv;
-}

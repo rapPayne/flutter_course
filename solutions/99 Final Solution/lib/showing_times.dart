@@ -1,8 +1,7 @@
 import 'package:daam/state.dart';
-import 'package:daam/state/app_state.dart';
+import 'package:daam/state/global.dart';
 import 'package:daam/state/movie.dart';
 import 'package:daam/state/repository.dart';
-import 'package:daam/state/superState.dart';
 import 'state/showing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +19,6 @@ class ShowingTimes extends StatefulWidget {
 
 class _ShowingTimesState extends State<ShowingTimes> {
   List<Showing> _showings = [];
-  late AppState _state;
 
   @override
   void initState() {
@@ -32,9 +30,12 @@ class _ShowingTimesState extends State<ShowingTimes> {
     super.initState();
   }
 
+  List<Map<String, dynamic>> cart =
+      global.get<List<Map<String, dynamic>>>("cart");
+
   @override
   Widget build(BuildContext context) {
-    _state = SuperState.of(context).stateWrapper.state as AppState;
+    //_state = SuperState.of(context).stateWrapper.state as AppState;
     String selectedDateString =
         DateFormat.MMMMEEEEd().format(widget.selectedDate);
 
@@ -60,10 +61,9 @@ class _ShowingTimesState extends State<ShowingTimes> {
     for (int i = 0; i < showings.length; i++) {
       DateTime showingTime = showings[i].showingTime;
       String timeString = DateFormat.jm().format(showingTime.toLocal());
-      var textWidget = TextButton(
+      var textButton = TextButton(
         child: Text(timeString),
         onPressed: () async {
-          SuperState.of(context).change(_state.copyWith());
           // Ask the API server for all of the tables and seats for this theater.
           var theater = await fetchTheater(theaterId: showings[i].theaterId);
           var reservations =
@@ -73,17 +73,16 @@ class _ShowingTimesState extends State<ShowingTimes> {
           for (var table in theater['tables']) {
             for (var seat in table['seats']) {
               seat['table_number'] = table['table_number'];
-              seat['status'] = getSeatStatus(seat, reservations, _state.cart);
+              seat['status'] = getSeatStatus(seat, reservations, cart);
             }
           }
-          // ignore: use_build_context_synchronously
-          SuperState.of(context).change(
-              _state.copyWith(selectedShowing: showings[i], theater: theater));
+          global.set("theater", theater);
+          global.set("selectedShowing", showings[i]);
           // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, '/pickseats');
         },
       );
-      textWidgets.add(textWidget);
+      textWidgets.add(textButton);
     }
     return textWidgets;
   }
