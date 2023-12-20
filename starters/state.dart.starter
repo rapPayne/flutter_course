@@ -19,8 +19,9 @@ final selectedShowingProvider = StateProvider<dynamic>((_) =>
 final showingsProvider = StateProvider((_) => <dynamic>[]);
 
 String getBaseUrl({String port = "3007"}) {
-  // android 10.0.2.2 via AVD
-  // android 10.0.3.2 via Genymotion
+  // android 10.0.2.2 via AVD or actual IP address
+  // To find the actual IP address, go ipconfig on Windows or ifconfig on MacOS
+  // Look for "inet"
   String baseUrl = "http://127.0.0.1:$port";
   if (kIsWeb)
     return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.

@@ -22,7 +22,9 @@ String getBaseUrl({String port = "3008"}) {
   }
   if (Platform.isMacOS) return baseUrl;
   if (Platform.isAndroid) {
-    return "http://10.0.2.2:$port";
+    print("192.168.254.153");
+    //return "http://10.0.2.2:$port";
+    return "http://192.168.254.153:$port";
   } else {
     return baseUrl;
   }
