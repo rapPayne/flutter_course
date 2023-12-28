@@ -1,9 +1,8 @@
+// ignore_for_file: file_names
 import 'package:daam/state/global.dart';
 import 'package:daam/state/seat.dart';
 import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
-// import 'state/app_state.dart';
-// import 'state/superState.dart';
 
 class Seat extends StatefulWidget {
   final Map<String, dynamic> seat;
@@ -62,7 +61,7 @@ class _SeatState extends State<Seat> {
           case SeatStatus.available:
             newCart.add({
               ...widget.seat,
-              "showingId": _selectedShowing!.id,
+              "showingId": _selectedShowing.id,
             });
             setState(() {
               widget.seat["status"] = SeatStatus.inCart;

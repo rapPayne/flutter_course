@@ -3,8 +3,6 @@ import 'package:daam/state.dart';
 import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
 import 'state/movie.dart';
-// import 'state/app_state.dart';
-// import 'state/superState.dart';
 
 class FilmBrief extends StatelessWidget {
   final Movie film;

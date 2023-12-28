@@ -42,6 +42,8 @@ class _DatePickerState extends State<DatePicker> {
           // ),
           onPressed: () {
             global.set("selectedDate", date);
+            Navigator.pushNamed(context,
+                '/'); // Kludgey way to get showing times to repopulate.
           });
     }).toList();
   }

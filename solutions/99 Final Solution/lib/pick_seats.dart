@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:daam/state/global.dart';
 import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'table.dart' as daam_table;
 
 class PickSeats extends StatefulWidget {
@@ -16,18 +15,9 @@ class PickSeats extends StatefulWidget {
 }
 
 class _PickSeatsState extends State<PickSeats> {
-  // late AppState _state;
   DateTime selectedDate = global.get<DateTime>("selectedDate");
   Showing selectedShowing = global.get<Showing>("selectedShowing");
   Map<String, dynamic> theater = global.get<Map<String, dynamic>>("theater");
-
-  // @override
-  // void didChangeDependencies() {
-  //   _state = SuperState.of(context).stateWrapper.state as AppState;
-  //   assert(_state.theater != null,
-  //       "When picking seats, the theater is null. This should never happen!");
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +28,22 @@ class _PickSeatsState extends State<PickSeats> {
         appBar: AppBar(
           title: Text("Pick your seats $random"),
         ),
-        body: InteractiveViewer(
-          minScale: 0.2,
-          maxScale: 10.0,
-          clipBehavior: Clip.none,
-          child: SizedBox(
-            width: 700.0,
-            child: LayoutBuilder(builder: (context, constraints) {
-              print(
-                  "maxWidth: ${constraints.maxWidth}, maxHeight: ${constraints.maxHeight}");
-              return SeatMap(theater: theater);
-            }),
+        body: SingleChildScrollView(
+          child: InteractiveViewer(
+            // minScale: 0.2,
+            // maxScale: 10.0,
+            //clipBehavior: Clip.none,
+            child:
+                // LayoutBuilder(builder: (context, constraints) {
+                //   print(
+                //       "maxWidth: ${constraints.maxWidth}, maxHeight: ${constraints.maxHeight}");
+                //   return
+                Transform.scale(
+              scale: 0.95,
+              //origin: const Offset(1.0, 1.0),
+              child: theaterWidget(theater: theater),
+            ),
+            // }),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -58,7 +53,52 @@ class _PickSeatsState extends State<PickSeats> {
           },
         ));
   }
+
+  Widget theaterWidget({Map<String, dynamic> theater = const {}}) {
+    var widget = Container(
+      width: 2500,
+      height: 500,
+      clipBehavior: Clip.none,
+      child: Column(
+        children: [
+          Container(
+            color: Colors.pink,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Text(
+              "Screen",
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(color: Colors.white),
+            ),
+          ),
+          SeatMap(
+            theater: theater,
+          ),
+        ],
+      ),
+      // Row(
+      //   children: [
+      //     aBox(),
+      //     aBox(color: Colors.green),
+      //     aBox(color: Colors.blue),
+      //   ],
+      // ),
+    );
+    return widget;
+  }
 }
+
+// Widget aBox({
+//   double width = 333.3,
+//   Color color = Colors.red,
+// }) {
+//   return Container(
+//     width: width,
+//     color: color,
+//   );
+// }
 
 class SeatMap extends StatelessWidget {
   const SeatMap({
@@ -70,11 +110,16 @@ class SeatMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topLeft,
-      children: theater["tables"]
-          .map<Widget>((table) => daam_table.Table(table: table))
-          .toList(),
+    return Container(
+      width: 3500.0,
+      height: 450.0,
+      clipBehavior: Clip.none, // This does nothing.
+      child: Stack(
+        alignment: Alignment.topLeft,
+        children: theater["tables"]
+            .map<Widget>((table) => daam_table.Table(table: table))
+            .toList(),
+      ),
     );
   }
 }

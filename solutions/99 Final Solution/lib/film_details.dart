@@ -3,15 +3,8 @@ import 'package:daam/state/movie.dart';
 import 'package:flutter/material.dart';
 import 'showing_times.dart';
 
-class FilmDetails extends StatefulWidget {
+class FilmDetails extends StatelessWidget {
   const FilmDetails({super.key});
-
-  @override
-  State<FilmDetails> createState() => _FilmDetailsState();
-}
-
-class _FilmDetailsState extends State<FilmDetails> {
-  // late AppState _state;
 
   @override
   Widget build(BuildContext context) {

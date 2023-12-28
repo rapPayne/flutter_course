@@ -5,15 +5,12 @@ import 'film_details.dart';
 import 'landing.dart';
 import 'pick_seats.dart';
 import 'ticket.dart';
-// import 'state/superState.dart';
-// import 'state/app_state.dart';
-
 import './state/global.dart';
 
 void main() {
   global.set("selectedDate", DateTime.now());
   global.set("cart", <Map<String, dynamic>>[]);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
