@@ -54,6 +54,12 @@ Future<List<Film>> fetchFilms() {
   });
 }
 
+// Fetch reservations for a showing
+Future<dynamic> fetchReservationsForShowing({required int showingId}) {
+  String url = "${getBaseUrl()}/api/showings/$showingId/reservations";
+  return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
 // Fetch showings using a dynamic List
 Future<List<dynamic>> fetchShowings(
     {required int filmId, required DateTime date}) {
@@ -62,81 +68,35 @@ Future<List<dynamic>> fetchShowings(
   return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
-/***********************************************************************
-SuperState included below for convenience in copying
-***********************************************************************/
-import 'package:flutter/material.dart';
 
-/// The root class.
-class SuperState<T> extends StatefulWidget {
-  SuperState({
-    super.key,
-    required this.initialState,
-    required this.child,
-  }) : stateWrapper = StateWrapper<T>(state: initialState);
-
-  final T initialState;
-  final StateWrapper<T> stateWrapper;
-  final Widget child;
-
-  /// Gets a copy of the user's state object.
-  static SuperStateState of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<_SuperStateInheritedWidget>()!
-        .stateWidget;
-  }
-
-  @override
-  State<SuperState> createState() => SuperStateState();
+// Fetch a theater
+Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
+  String url = "${getBaseUrl()}/api/theaters/$theaterId";
+  return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
-/// Allows the user to mutate data and see the rerendered results.
-class SuperStateState<T> extends State<SuperState> {
-  late StateWrapper<T> appState;
-
-  @override
-  void initState() {
-    appState = widget.stateWrapper as StateWrapper<T>;
-    super.initState();
-  }
-
-  void change(T newState) {
-    setState(() {
-      appState = StateWrapper<T>(state: newState);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _SuperStateInheritedWidget(
-      stateWidget: this,
-      state: appState,
-      child: widget.child,
-    );
-  }
-}
-
-/// Hidden. User never sees this.
-class _SuperStateInheritedWidget extends InheritedWidget {
-  const _SuperStateInheritedWidget({
-    required this.stateWidget,
-    required this.state,
-    required super.child,
-  });
-
-  final SuperStateState stateWidget;
-  final StateWrapper state;
-
-  @override
-  bool updateShouldNotify(_SuperStateInheritedWidget oldWidget) {
-    return state != oldWidget.state;
-  }
-}
-
-/// Holds a user-defined object<T> called state, which is the state of the app
-@immutable
-class StateWrapper<T> {
-  const StateWrapper({required this.state});
-
-  final T state;
+/// Purchase film tickets
+/// The purchase Map should look like this:
+/// {
+///   "showing_id": 100,
+///   "seats": [
+///     7,
+///     8,
+///     10,
+///     22
+///   ],
+///   "user_id": 10,
+///   "first_name": "Jo",
+///   "last_name": "Smith",
+///   "email": "jo.smith@gmail.com",
+///   "phone": "555-555-1234",
+///   "pan": "6011-0087-7345-4323",
+///   "expiry_month": 1,
+///   "expiry_year": 2025,
+///   "cvv": 123
+/// }
+Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
+  String url = "${getBaseUrl()}/api/buytickets";
+  String encodedBody = jsonEncode(purchase);
+  return post(Uri.parse(url), body: encodedBody);
 }

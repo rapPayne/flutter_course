@@ -48,12 +48,6 @@ Future<Film> fetchFilm({required int id}) {
   });
 }
 
-// Fetch reservations for a showing
-Future<dynamic> fetchReservationsForShowing({required int showing_id}) {
-  String url = "${getBaseUrl()}/api/showings/$showing_id/reservations";
-  return http.get(Uri.parse(url)).then((res) => jsonDecode(res.body));
-}
-
 // Fetch showings using a dynamic Map
 Future<dynamic> fetchShowings({required int film_id, required DateTime date}) {
   String url =
