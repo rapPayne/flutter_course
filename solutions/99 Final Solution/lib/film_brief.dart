@@ -13,7 +13,6 @@ class FilmBrief extends StatelessWidget {
     DateTime selectedDate = global.get<DateTime>('selectedDate');
     return GestureDetector(
       onTap: () {
-        //SuperState.of(context).change(state.copyWith(selectedFilm: film));
         global.set("selectedFilm", film);
         Navigator.pushNamed(context, '/film');
       },

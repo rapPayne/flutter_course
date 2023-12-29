@@ -8,8 +8,8 @@ import 'ticket.dart';
 import './state/global.dart';
 
 void main() {
-  global.set("selectedDate", DateTime.now());
-  global.set("cart", <Map<String, dynamic>>[]);
+  global.set("selectedDate", DateTime.now()); // <-- Add this line
+  global.set("cart", <Map<String, dynamic>>[]); // <-- And this one
   runApp(const MyApp());
 }
 

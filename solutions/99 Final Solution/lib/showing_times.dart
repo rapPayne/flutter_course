@@ -19,6 +19,8 @@ class ShowingTimes extends StatefulWidget {
 
 class _ShowingTimesState extends State<ShowingTimes> {
   List<Showing> _showings = [];
+  List<Map<String, dynamic>> cart =
+      global.get<List<Map<String, dynamic>>>("cart");
 
   @override
   void initState() {
@@ -29,9 +31,6 @@ class _ShowingTimesState extends State<ShowingTimes> {
     });
     super.initState();
   }
-
-  List<Map<String, dynamic>> cart =
-      global.get<List<Map<String, dynamic>>>("cart");
 
   @override
   Widget build(BuildContext context) {
@@ -63,23 +62,31 @@ class _ShowingTimesState extends State<ShowingTimes> {
       String timeString = DateFormat.jm().format(showingTime.toLocal());
       var textButton = TextButton(
         child: Text(timeString),
-        onPressed: () async {
-          // Ask the API server for all of the tables and seats for this theater.
-          var theater = await fetchTheater(theaterId: showings[i].theaterId);
-          var reservations =
-              (await fetchReservationsForShowing(showingId: showings[i].id)
-                      as List)
-                  .cast<Map<String, dynamic>>();
-          for (var table in theater['tables']) {
-            for (var seat in table['seats']) {
-              seat['table_number'] = table['table_number'];
-              seat['status'] = getSeatStatus(seat, reservations, cart);
+        onPressed: () {
+          // Ask the API server for all of the tables and seats for this theater
+          var theaterFuture = fetchTheater(theaterId: showings[i].theaterId);
+          // Ask the API server for all reservations for this showing
+          var reservationsFuture = fetchReservationsForShowing(
+                  showingId: showings[i].id)
+              .then((reservations) => (reservations as List))
+              .then(
+                  (reservations) => reservations.cast<Map<String, dynamic>>());
+          // After the server fully responds, mark each seat as available, inCart, or reserved
+          Future.wait([theaterFuture, reservationsFuture]).then((fa) {
+            var theater = fa[0] as Map<String, dynamic>;
+            var reservations = fa[1] as List<Map<String, dynamic>>;
+            for (var table in theater['tables']) {
+              for (var seat in table['seats']) {
+                seat['table_number'] = table['table_number'];
+                seat['status'] = getSeatStatus(seat, reservations, cart);
+              }
             }
-          }
-          global.set("theater", theater);
-          global.set("selectedShowing", showings[i]);
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, '/pickseats');
+            //TODO: Set the theater in Global state here
+            //TODO: Set the selectedShowing in Global state here
+            global.set("theater", theater);
+            global.set("selectedShowing", showings[i]);
+            Navigator.pushNamed(context, '/pickseats');
+          });
         },
       );
       textWidgets.add(textButton);
@@ -88,11 +95,15 @@ class _ShowingTimesState extends State<ShowingTimes> {
   }
 }
 
+/// Returns a seat's status
+///
+/// seat: The seat whose status we're examining
+/// reservations: All the reservations from other customers. These seats are unavailable
+/// cart: The current shopping cart. You may already have this seat in your cart.
 SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
     List<Map<String, dynamic>> cart) {
   bool seatIsInCart = cart.any((heldSeat) => heldSeat['id'] == seat['id']);
   if (seatIsInCart) {
-    print("found a seat in the cart");
     return SeatStatus.inCart;
   }
   bool seatIsReserved =

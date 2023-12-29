@@ -10,9 +10,6 @@ class FilmDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     Movie selectedFilm = global.get<Movie>("selectedFilm");
     DateTime selectedDate = global.get<DateTime>("selectedDate");
-
-    print("film is ${selectedFilm.title}");
-    //_state = SuperState.of(context).stateWrapper.state;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Film Details"),
@@ -39,21 +36,34 @@ class FilmDetails extends StatelessWidget {
                   ),
                 ),
                 Container(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(selectedFilm.title ?? "")),
-                Container(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(selectedFilm.tagline ?? "")),
-                Container(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(selectedFilm.homepage ?? "")),
-                Container(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(selectedFilm.overview ?? "")),
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    selectedFilm.title ?? "",
+                  ),
+                ),
                 Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 5),
                   child: Text(
-                      "Rating: ${selectedFilm.voteAverage}/10 ${selectedFilm.voteCount} votes"),
+                    selectedFilm.tagline ?? "",
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    selectedFilm.homepage ?? "",
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    selectedFilm.overview ?? "",
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    "Rating: ${selectedFilm.voteAverage}/10 ${selectedFilm.voteCount} votes",
+                  ),
                 ),
               ],
             ),

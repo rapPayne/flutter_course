@@ -1,7 +1,4 @@
-// import 'package:daam/state/app_state.dart';
-// import 'package:daam/state/superState.dart';
 import 'dart:math';
-
 import 'package:daam/state/global.dart';
 import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
