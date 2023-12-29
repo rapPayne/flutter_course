@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 import 'package:daam/state/global.dart';
+import 'package:daam/state/repository.dart';
 import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
-import 'state.dart';
 import './state/customer.dart';
 
 class Checkout extends StatefulWidget {
