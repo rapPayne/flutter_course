@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:daam/state/showing.dart';
 import 'package:daam/state.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';

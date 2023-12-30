@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 import 'package:daam/state/global.dart';
 import 'package:daam/state/seat.dart';
-import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
 
 class Seat extends StatefulWidget {

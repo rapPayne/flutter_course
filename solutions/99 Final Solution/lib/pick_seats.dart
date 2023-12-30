@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:daam/state/global.dart';
-import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
 import 'table.dart' as daam_table;
 

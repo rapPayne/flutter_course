@@ -14,14 +14,14 @@ class FilmDetails extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Text("FilmDetails"),
+          const Text("FilmDetails"),
           Image.network("http://localhost:3008/${selectedFilm.posterPath}"),
           ShowingTimes(
             film: selectedFilm,
             selectedDate: selectedDate,
           ),
           Text(
-            selectedFilm.title ?? "",
+            selectedFilm.title,
           ),
           Text(
             selectedFilm.tagline ?? "",

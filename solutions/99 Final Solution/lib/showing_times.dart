@@ -1,8 +1,6 @@
-import 'package:daam/state.dart';
 import 'package:daam/state/global.dart';
 import 'package:daam/state/movie.dart';
 import 'package:daam/state/repository.dart';
-import 'state/showing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'state/seat.dart';
@@ -97,8 +95,6 @@ class _ShowingTimesState extends State<ShowingTimes> {
           seat['status'] = getSeatStatus(seat, reservations, cart);
         }
       }
-      //TODO: Set the theater in Global state here
-      //TODO: Set the selectedShowing in Global state here
       global.set("theater", theater);
       global.set("selectedShowing", showing);
 

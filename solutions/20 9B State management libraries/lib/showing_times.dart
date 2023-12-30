@@ -80,8 +80,6 @@ class _ShowingTimesState extends State<ShowingTimes> {
           seat['status'] = getSeatStatus(seat, reservations, cart);
         }
       }
-      //TODO: Set the theater in Global state here
-      //TODO: Set the selectedShowing in Global state here
       global.set("theater", theater);
       global.set("selectedShowing", showing);
 
