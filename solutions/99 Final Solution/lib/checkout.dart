@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
-import 'package:daam/state/showing.dart';
 import 'package:flutter/material.dart';
 import './state/customer.dart';
 
@@ -22,23 +21,23 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final Map<String, dynamic> _purchase = {};
-  final List<Map<String, dynamic>> _cart =
-      global.get<List<Map<String, dynamic>>>('cart');
-  Showing selectedShowing = global.get<Showing>("selectedShowing");
+  final Map<String, dynamic> _cart = global.get<Map<String, dynamic>>('cart');
+  Map<String, dynamic> selectedShowing =
+      global.get<Map<String, dynamic>>('selectedShowing');
   final Customer? _customer = global.maybeGet<Customer>('customer');
 
   final GlobalKey<FormState> _key = GlobalKey();
 
   List<TableRow> _makeTableRows() {
-    List<TableRow> rows = _cart
-        .map((item) => TableRow(children: [
+    List<TableRow> rows = _cart["seats"]
+        .map<TableRow>((item) => TableRow(children: [
               Text('Table ${item['table_number']} Seat ${item['seat_number']}'),
               const Text(''),
               Text('${item['price']}'),
             ]))
         .toList();
-    double subtotal =
-        _cart.fold<double>(0.0, (sum, item) => sum + item["price"]);
+    double subtotal = _cart['seats']
+        .fold<double>(0.0, (double sum, dynamic item) => sum + item["price"]);
     double tax = subtotal * 0.0825;
     rows.addAll([
       TableRow(children: [
@@ -62,8 +61,8 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    _purchase["showing_id"] = selectedShowing.id;
-    _purchase["seats"] = _cart.map((seat) => seat["id"]).toList();
+    _purchase['showing_id'] = selectedShowing['id'];
+    _purchase['seats'] = _cart['seats'].map((seat) => seat['id']).toList();
     _first = _customer?.first;
     _last = _customer?.last;
     _email = _customer?.email;
@@ -81,7 +80,7 @@ class _CheckoutState extends State<Checkout> {
       buyTickets(purchase: _purchase).then((res) {
         // TODO: Send POST request to buyTickets(). Response will have an array of ticket numbers.
         // Empty out the cart
-        global.set("cart", []);
+        global.set('cart', <String, dynamic>{});
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
         // ignore: avoid_print

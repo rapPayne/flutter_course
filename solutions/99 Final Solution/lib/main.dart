@@ -9,7 +9,7 @@ import './state/global.dart';
 
 void main() {
   global.set("selectedDate", DateTime.now()); // <-- Add this line
-  global.set("cart", <Map<String, dynamic>>[]); // <-- And this one
+  global.set("cart", <String, dynamic>{"seats": []}); // <-- And this one
   runApp(const MyApp());
 }
 

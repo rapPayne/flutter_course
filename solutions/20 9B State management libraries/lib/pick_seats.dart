@@ -12,6 +12,7 @@ class _PickSeatsState extends State<PickSeats> {
   DateTime selectedDate = global.get<DateTime>("selectedDate");
   Map<String, dynamic> selectedShowing =
       global.get<Map<String, dynamic>>("selectedShowing");
+  Map<String, dynamic> cart = global.get("cart");
   Map<String, dynamic> theater = global.get<Map<String, dynamic>>("theater");
 
   @override

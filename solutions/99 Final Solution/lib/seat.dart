@@ -14,15 +14,13 @@ class Seat extends StatefulWidget {
 }
 
 class _SeatState extends State<Seat> {
-  // late AppState _state;
   Color _seatColor = Colors.blue;
-  final List<Map<String, dynamic>> _cart =
-      global.get<List<Map<String, dynamic>>>('cart');
-  final Showing _selectedShowing = global.get<Showing>('selectedShowing');
+  final Map<String, dynamic> _cart = global.get<Map<String, dynamic>>('cart');
+  final Map<String, dynamic> _selectedShowing =
+      global.get<Map<String, dynamic>>('selectedShowing');
 
   @override
   Widget build(BuildContext context) {
-    // _state = SuperState.of(context).stateWrapper.state as AppState;
     switch (widget.seat["status"]) {
       case SeatStatus.reserved:
         _seatColor = Colors.grey;
@@ -46,22 +44,22 @@ class _SeatState extends State<Seat> {
         ]),
       ),
       onTap: () {
-        List<Map<String, dynamic>> newCart = _cart;
-        switch (widget.seat["status"]) {
+        Map<String, dynamic> newCart = _cart;
+        switch (widget.seat['status']) {
           case SeatStatus.reserved:
             return;
           case SeatStatus.inCart:
-            newCart = newCart
-                .where((item) => item["id"] != widget.seat["id"])
+            newCart['seats'] = newCart['seats']
+                .where((item) => item['id'] != widget.seat['id'])
                 .toList();
             setState(() {
-              widget.seat["status"] = SeatStatus.available;
+              widget.seat['status'] = SeatStatus.available;
             });
             break;
           case SeatStatus.available:
-            newCart.add({
+            newCart['seats'].add({
               ...widget.seat,
-              "showingId": _selectedShowing.id,
+              "showingId": _selectedShowing['id'],
             });
             setState(() {
               widget.seat["status"] = SeatStatus.inCart;

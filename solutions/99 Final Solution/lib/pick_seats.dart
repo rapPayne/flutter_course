@@ -13,13 +13,15 @@ class PickSeats extends StatefulWidget {
 
 class _PickSeatsState extends State<PickSeats> {
   DateTime selectedDate = global.get<DateTime>("selectedDate");
-  Showing selectedShowing = global.get<Showing>("selectedShowing");
+  Map<String, dynamic> selectedShowing =
+      global.get<Map<String, dynamic>>("selectedShowing");
+  Map<String, dynamic> cart = global.get("cart");
   Map<String, dynamic> theater = global.get<Map<String, dynamic>>("theater");
 
   @override
   Widget build(BuildContext context) {
     var random = Random().nextInt(1000);
-    assert(selectedShowing.theaterId == theater["id"],
+    assert(selectedShowing["theater_id"] == theater["id"],
         "Theater is out of sync. That should never happen.");
     return Scaffold(
         appBar: AppBar(
@@ -46,6 +48,7 @@ class _PickSeatsState extends State<PickSeats> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.shopping_cart),
           onPressed: () {
+            //TODO: Save the cart to global?
             Navigator.pushNamed(context, '/checkout');
           },
         ));

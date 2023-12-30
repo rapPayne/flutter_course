@@ -12,15 +12,15 @@ Future<dynamic> fetchReservationsForShowing({required int showingId}) {
 }
 
 // Fetch showings using a dynamic Map
-Future<List<Showing>> fetchShowings(
+Future<List<dynamic>> fetchShowings(
     {required int filmId, required DateTime date}) {
   String url =
       "${getBaseUrl()}/api/showings/$filmId/${DateFormat('yyyy-MM-dd').format(date)}";
   return get(Uri.parse(url))
       // return http
       //     .get(Uri.parse(url))
-      .then((res) => jsonDecode(res.body))
-      .then((res) => Showing.showingsFromJson(res));
+      .then((res) => jsonDecode(res.body));
+  //.then((res) => Showing.showingsFromJson(res));
 }
 
 // Fetch a theater
