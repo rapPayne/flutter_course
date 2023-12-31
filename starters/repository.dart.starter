@@ -75,6 +75,7 @@ Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
   return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
 }
 
+
 /// Purchase film tickets
 /// The purchase Map should look like this:
 /// {
@@ -98,5 +99,6 @@ Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
 Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
   String url = "${getBaseUrl()}/api/buytickets";
   String encodedBody = jsonEncode(purchase);
-  return post(Uri.parse(url), body: encodedBody);
+  return post(Uri.parse(url),
+      headers: {"Content-Type": "application/json"}, body: encodedBody);
 }
