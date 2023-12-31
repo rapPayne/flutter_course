@@ -29,16 +29,8 @@ class _PickSeatsState extends State<PickSeats> {
             cart = {
               "showing_id": 100,
               "seats": [7, 8, 10, 22],
-              "user_id": 10,
-              "first_name": "Jo",
-              "last_name": "Smith",
-              "email": "jo.smith@gmail.com",
-              "phone": "555-555-1234",
-              "pan": "6011-0087-7345-4323",
-              "expiry_month": 1,
-              "expiry_year": 2025,
-              "cvv": 123
             };
+            global.set("cart", cart);
             Navigator.pushNamed(context, "/checkout");
           },
         )

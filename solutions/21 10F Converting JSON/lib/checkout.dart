@@ -1,7 +1,5 @@
 // ignore_for_file: unused_field
-
 import 'dart:convert';
-
 import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
 
