@@ -174,15 +174,13 @@ class _CheckoutState extends State<Checkout> {
     var url = '${getBaseUrl()}/api/buyTickets';
     var uri = Uri.parse(url);
     var headers = {'Content-Type': 'application/json'};
-    try {
-      post(uri, body: purchaseJson, headers: headers).then((res) {
-        var ticketNumbers = (json.decode(res.body) as List).cast<int>();
-        global.set("ticketNumbers", ticketNumbers);
-        Navigator.pushNamed(context, "/ticket");
-      });
-    } catch (e) {
+    post(uri, body: purchaseJson, headers: headers).then((res) {
+      var ticketNumbers = (json.decode(res.body) as List).cast<int>();
+      global.set("ticketNumbers", ticketNumbers);
+      Navigator.pushNamed(context, "/ticket");
+    }).catchError((e) {
       //TODO: Respond to the error somehow
-    }
+    });
   }
 
   String? _validateExpiry() {
