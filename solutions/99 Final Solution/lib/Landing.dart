@@ -28,7 +28,10 @@ class _LandingState extends State<Landing> {
           Row(
             children: [
               Image.asset("assets/daam.png", height: 75, fit: BoxFit.cover),
-              const Text("Dinner And A Movie"),
+              Text(
+                "Dinner And A Movie",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
             ],
           ),
           const Text(

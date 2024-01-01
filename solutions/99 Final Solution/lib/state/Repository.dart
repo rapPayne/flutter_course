@@ -48,9 +48,9 @@ Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
 ///   "expiry_year": 2025,
 ///   "cvv": 123
 /// }
-
 Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
   String url = "${getBaseUrl()}/api/buytickets";
   String encodedBody = jsonEncode(purchase);
-  return post(Uri.parse(url), body: encodedBody);
+  return post(Uri.parse(url),
+      headers: {"Content-Type": "application/json"}, body: encodedBody);
 }

@@ -61,7 +61,7 @@ class _PickSeatsState extends State<PickSeats> {
       child: Column(
         children: [
           Container(
-            color: Colors.pink,
+            color: Theme.of(context).primaryColor,
             width: double.infinity,
             alignment: Alignment.center,
             child: Text(

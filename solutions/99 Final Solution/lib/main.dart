@@ -18,22 +18,45 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = ColorScheme.fromSwatch(
+      primarySwatch: Colors.blue,
+    ).copyWith(background: Colors.white);
+
+    var themeData = ThemeData(
+      colorScheme: colorScheme,
+      textTheme: const TextTheme(titleMedium: TextStyle(color: Colors.blue)),
+      useMaterial3: true,
+    );
     Customer customer = Customer()..email = "rap@creator.net";
     global.set("customer", customer);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Reservations - Dinner And A Movie',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return OurThemeWidget(
+      child: MaterialApp(
+        theme: themeData,
+        debugShowCheckedModeBanner: false,
+        title: 'Reservations - Dinner And A Movie',
+        initialRoute: "/",
+        routes: {
+          "/": (ctx) => const Landing(),
+          "/film": (ctx) => const FilmDetails(),
+          "/pickseats": (ctx) => const PickSeats(),
+          "/checkout": (ctx) => const Checkout(),
+          "/ticket": (ctx) => const Ticket(),
+        },
       ),
-      initialRoute: "/",
-      routes: {
-        "/": (ctx) => const Landing(),
-        "/film": (ctx) => const FilmDetails(),
-        "/pickseats": (ctx) => const PickSeats(),
-        "/checkout": (ctx) => const Checkout(),
-        "/ticket": (ctx) => const Ticket(),
-      },
     );
+  }
+}
+
+class OurThemeWidget extends StatelessWidget {
+  const OurThemeWidget({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return
+        // Theme(
+        //   data:
+        //   child:
+        child;
   }
 }

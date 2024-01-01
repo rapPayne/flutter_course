@@ -16,10 +16,15 @@ class Table extends StatelessWidget {
             alignment: Alignment.center,
             width: 30.0 * (table["seats"] as List).length,
             height: 30.0,
-            decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            child: Text("Table ${table["table_number"]}"),
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(15))),
+            child: Text(
+              "${table["table_number"]}",
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.background,
+                  ),
+            ),
           ),
           Row(
             children:

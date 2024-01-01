@@ -1,4 +1,5 @@
 // ignore_for_file: file_names
+import 'dart:convert';
 import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
@@ -78,12 +79,13 @@ class _CheckoutState extends State<Checkout> {
       _key.currentState!.save();
 
       buyTickets(purchase: _purchase).then((res) {
-        // TODO: Send POST request to buyTickets(). Response will have an array of ticket numbers.
         // Empty out the cart
         global.set('cart', <String, dynamic>{});
+        List<Map<String, dynamic>> tickets =
+            List<Map<String, dynamic>>.from(json.decode(res.body));
+        global.set('tickets', tickets);
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
-        // ignore: avoid_print
         print("Error purchasing. $err");
       });
 
