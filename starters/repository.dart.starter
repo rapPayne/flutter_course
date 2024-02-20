@@ -9,6 +9,10 @@ import 'film.dart';
 /// The different platforms block different URLs. This function 
 /// allows us to request API data regardless of where we're 
 /// debugging.
+/// For MacOS, you should also edit MacOS entitlements and add this to
+/// macos/Runner/DebugProfile.entitlements
+/// <key>com.apple.security.network.client</key>
+/// <true/>
 String getBaseUrl({String port = "3008"}) {
   // android 10.0.2.2 via AVD
   // android 10.0.3.2 via Genymotion
