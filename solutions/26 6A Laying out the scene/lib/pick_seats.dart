@@ -21,9 +21,9 @@ class _PickSeatsState extends State<PickSeats> {
       appBar: AppBar(
         title: const Text("Pick your seats"),
       ),
-      body: Column(
+      body: const Column(
         children: [
-          const Text("PickSeats"),
+          Text("PickSeats"),
         ],
       ),
       floatingActionButton: FloatingActionButton(
