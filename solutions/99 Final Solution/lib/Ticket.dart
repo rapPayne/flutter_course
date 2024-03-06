@@ -21,7 +21,14 @@ class _TicketState extends State<Ticket> {
         // ignore: avoid_unnecessary_containers
         body: Container(
           child: Column(
-            children: tickets.map((t) => makeTicket(t)).toList(),
+            children: [
+              ...tickets.map((t) => makeTicket(t)).toList(),
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.popUntil(context, ModalRoute.withName('/')),
+                child: const Text("Finished"),
+              ),
+            ],
           ),
         ));
   }
