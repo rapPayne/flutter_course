@@ -43,7 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
     fetchFilms().then((films) => this.setState(() => this._films = films));
     fetchShowings(filmId: 1, date: DateTime.now())
         .then((showings) => this.setState(() => this._showings = showings));
-    List<DateTime> dates = makeConsecutiveDates(5, DateTime.now());
+    List<DateTime> dates =
+        makeConsecutiveDates(howMany: 5, startDate: DateTime.now());
     print(dates);
   }
 

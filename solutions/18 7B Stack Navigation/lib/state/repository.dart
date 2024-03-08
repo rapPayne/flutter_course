@@ -19,7 +19,7 @@ String getBaseUrl({String port = "3008"}) {
   if (kIsWeb) {
     return baseUrl; // Must be first b/c Platform.operatingSystem throws on web.
   }
-  print("Platform.environtment is ${Platform.operatingSystem}");
+  print("Platform.environment is ${Platform.operatingSystem}");
   if (Platform.isMacOS) return "http://localhost:$port";
   if (Platform.isAndroid) {
     return "http://10.0.2.2:$port";
@@ -55,12 +55,50 @@ Future<List<Film>> fetchFilms() {
   });
 }
 
+// Fetch reservations for a showing
+Future<dynamic> fetchReservationsForShowing({required int showingId}) {
+  String url = "${getBaseUrl()}/api/showings/$showingId/reservations";
+  return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
 // Fetch showings using a dynamic List
 Future<List<dynamic>> fetchShowings(
     {required int filmId, required DateTime date}) {
   String url =
       "${getBaseUrl()}/api/showings/$filmId/${DateFormat('yyyy-MM-dd').format(date)}";
   return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
+// Fetch a theater
+Future<Map<String, dynamic>> fetchTheater({required int theaterId}) {
+  String url = "${getBaseUrl()}/api/theaters/$theaterId";
+  return get(Uri.parse(url)).then((res) => jsonDecode(res.body));
+}
+
+/// Purchase film tickets
+/// The purchase Map should look like this:
+/// {
+///   "showing_id": 100,
+///   "seats": [
+///     7,
+///     8,
+///     10,
+///     22
+///   ],
+///   "user_id": 10,
+///   "first_name": "Jo",
+///   "last_name": "Smith",
+///   "email": "jo.smith@gmail.com",
+///   "phone": "555-555-1234",
+///   "pan": "6011-0087-7345-4323",
+///   "expiry_month": 1,
+///   "expiry_year": 2025,
+///   "cvv": 123
+/// }
+Future<dynamic> buyTickets({required Map<String, dynamic> purchase}) async {
+  String url = "${getBaseUrl()}/api/buytickets";
+  String encodedBody = jsonEncode(purchase);
+  return post(Uri.parse(url), body: encodedBody);
 }
 
 // Make a list of five days
