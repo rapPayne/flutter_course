@@ -16,8 +16,7 @@ class ShowingTimes extends StatefulWidget {
 
 class _ShowingTimesState extends State<ShowingTimes> {
   List<dynamic> _showings = [];
-  List<Map<String, dynamic>> cart =
-      global.get<List<Map<String, dynamic>>>("cart");
+  Map<String, dynamic> cart = global.get<Map<String, dynamic>>("cart");
 
   @override
   void initState() {
@@ -100,8 +99,9 @@ enum SeatStatus {
 /// reservations: All the reservations from other customers. These are unavailable
 /// cart: The current shopping cart. You may already have this seat in your cart.
 SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
-    List<Map<String, dynamic>> cart) {
-  bool seatIsInCart = cart.any((heldSeat) => heldSeat['id'] == seat['id']);
+    Map<String, dynamic> cart) {
+  bool seatIsInCart =
+      cart['seats'].any((heldSeat) => heldSeat['id'] == seat['id']);
   if (seatIsInCart) {
     return SeatStatus.inCart;
   }
