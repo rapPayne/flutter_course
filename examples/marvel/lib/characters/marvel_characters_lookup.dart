@@ -30,7 +30,8 @@ class _LookupState extends State<Lookup> {
           .then((res) => res.data)
           .then((res) => res.results)
           .then((characters) => setState(() => _characters = characters))
-          .catchError((err) => print("Error fetching character $search. $err"));
+          .catchError(
+              (err) => debugPrint("Error fetching character $search. $err"));
     });
   }
 

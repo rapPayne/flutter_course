@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:marvel/sensitiveConstants.dart';
 import 'package:marvel/types/comics_types.dart';
-import 'package:marvel/utils/utilities.dart';
 
 class ComicsList extends StatefulWidget {
   const ComicsList({required this.characterId, super.key});
