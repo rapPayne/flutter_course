@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:marvel/characters/character_cell.dart';
-import 'package:marvel/sensitiveConstants.dart';
+import 'package:marvel/sensitive_constants.dart';
 import 'package:marvel/types/character_types.dart';
 
 class Lookup extends StatefulWidget {

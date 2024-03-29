@@ -15,7 +15,7 @@ class _NavigationBarDemoState extends State<NavigationBarDemo> {
         appBar: AppBar(title: const Text('Navigation Bar Demo')),
         body: Column(
           children: [
-            const Text("Tab 1"),
+            _bodyWidgets[_selectedIndex],
             const Spacer(),
             NavigationBar(
               destinations: const [
@@ -42,4 +42,10 @@ class _NavigationBarDemoState extends State<NavigationBarDemo> {
           ],
         ));
   }
+
+  final List<Widget> _bodyWidgets = [
+    const Text("Tab 1 - Home"),
+    const Text("Tab 2 - Explore"),
+    const Text("Tab 3 - Settings"),
+  ];
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/drawer_nav/drawer_demo.dart';
 import 'package:navigation/stack_nav/landing.dart';
-import 'package:navigation/navigation_bar_demo.dart';
+import 'package:navigation/tab_nav/navigation_bar_demo.dart';
 import 'package:navigation/stack_nav/stack1.dart';
 import 'package:navigation/subroutes/subroutes_demo.dart';
 import 'package:navigation/tab_nav/tabs_demo.dart';

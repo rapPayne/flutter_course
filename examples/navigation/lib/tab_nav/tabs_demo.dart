@@ -37,6 +37,15 @@ class _TabsDemoState extends State<TabsDemo> {
             Content(icon: Icons.looks_5, word: "five"), // Content for tab 5
           ],
         ),
+        bottomNavigationBar: const TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.looks_one)),
+            Tab(icon: Icon(Icons.looks_two)),
+            Tab(icon: Icon(Icons.looks_3)),
+            Tab(icon: Icon(Icons.looks_4)),
+            Tab(icon: Icon(Icons.looks_5)),
+          ],
+        ),
       ),
     );
   }

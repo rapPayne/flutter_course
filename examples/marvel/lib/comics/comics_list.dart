@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:marvel/sensitiveConstants.dart';
+import 'package:marvel/sensitive_constants.dart';
 import 'package:marvel/types/comics_types.dart';
 
 class ComicsList extends StatefulWidget {
