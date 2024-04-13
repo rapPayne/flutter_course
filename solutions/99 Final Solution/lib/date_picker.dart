@@ -1,6 +1,6 @@
 // import 'package:daam/state/app_state.dart';
 // import 'package:daam/state/superState.dart';
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For days of the week
 
@@ -12,7 +12,7 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<DatePicker> {
-  DateTime selectedDate = global.get<DateTime>("selectedDate");
+  DateTime selectedDate = rawState.get<DateTime>("selectedDate");
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -41,7 +41,7 @@ class _DatePickerState extends State<DatePicker> {
           //   flex: 1,
           // ),
           onPressed: () {
-            global.set("selectedDate", date);
+            rawState.set("selectedDate", date);
             Navigator.pushNamed(context,
                 '/'); // Kludgey way to get showing times to repopulate.
           });

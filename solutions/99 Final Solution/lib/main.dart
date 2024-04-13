@@ -1,15 +1,15 @@
 import 'package:daam/state/customer.dart';
 import 'package:flutter/material.dart';
+import 'package:raw_state/raw_state.dart';
 import 'checkout.dart';
 import 'film_details.dart';
 import 'landing.dart';
 import 'pick_seats.dart';
 import 'ticket.dart';
-import './state/global.dart';
 
 void main() {
-  global.set("selectedDate", DateTime.now()); // <-- Add this line
-  global.set("cart", <String, dynamic>{"seats": []}); // <-- And this one
+  rawState.set("selectedDate", DateTime.now()); // <-- Add this line
+  rawState.set("cart", <String, dynamic>{"seats": []}); // <-- And this one
   runApp(const MyApp());
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
     );
     Customer customer = Customer()..email = "rap@creator.net";
-    global.set("customer", customer);
+    rawState.set("customer", customer);
     return OurThemeWidget(
       child: MaterialApp(
         theme: themeData,

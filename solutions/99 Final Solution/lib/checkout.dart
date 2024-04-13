@@ -1,6 +1,5 @@
-// ignore_for_file: file_names
 import 'dart:convert';
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
 import './state/customer.dart';
@@ -22,10 +21,10 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final Map<String, dynamic> _purchase = {};
-  final Map<String, dynamic> _cart = global.get<Map<String, dynamic>>('cart');
+  final Map<String, dynamic> _cart = rawState.get<Map<String, dynamic>>('cart');
   Map<String, dynamic> selectedShowing =
-      global.get<Map<String, dynamic>>('selectedShowing');
-  final Customer? _customer = global.maybeGet<Customer>('customer');
+      rawState.get<Map<String, dynamic>>('selectedShowing');
+  final Customer? _customer = rawState.maybeGet<Customer>('customer');
 
   final GlobalKey<FormState> _key = GlobalKey();
 
@@ -80,10 +79,10 @@ class _CheckoutState extends State<Checkout> {
 
       buyTickets(purchase: _purchase).then((res) {
         // Empty out the cart
-        global.set('cart', <String, dynamic>{});
+        rawState.set('cart', <String, dynamic>{});
         List<Map<String, dynamic>> tickets =
             List<Map<String, dynamic>>.from(json.decode(res.body));
-        global.set('tickets', tickets);
+        rawState.set('tickets', tickets);
         Navigator.pushNamed(context, "/ticket");
       }).catchError((err) {
         print("Error purchasing. $err");
@@ -100,7 +99,7 @@ class _CheckoutState extends State<Checkout> {
         ..first = _first
         ..last = _last
         ..phone = _phone;
-      global.set("customer", customer);
+      rawState.set("customer", customer);
     }
 
     return Scaffold(
@@ -194,7 +193,7 @@ class _CheckoutState extends State<Checkout> {
                 child: DropdownButtonFormField<String>(
                   value: _expiryYear,
                   onChanged: (val) => setState(() => _expiryYear = val),
-                  onSaved: (val) => _purchase["expiry_month"] = val,
+                  onSaved: (val) => _purchase["expiry_year"] = val,
                   items: _makeExpiryYears(),
                 ),
               ),

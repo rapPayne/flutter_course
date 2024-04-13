@@ -1,6 +1,6 @@
 import 'package:daam/showing_times.dart';
 import 'package:daam/state.dart';
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 import 'state/movie.dart';
 
@@ -10,10 +10,10 @@ class FilmBrief extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime selectedDate = global.get<DateTime>('selectedDate');
+    DateTime selectedDate = rawState.get<DateTime>('selectedDate');
     return GestureDetector(
       onTap: () {
-        global.set("selectedFilm", film);
+        rawState.set("selectedFilm", film);
         Navigator.pushNamed(context, '/film');
       },
       child: Padding(

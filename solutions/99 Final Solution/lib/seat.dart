@@ -1,5 +1,4 @@
-// ignore_for_file: file_names
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:daam/state/seat.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +13,9 @@ class Seat extends StatefulWidget {
 
 class _SeatState extends State<Seat> {
   Color _seatColor = Colors.blue;
-  final Map<String, dynamic> _cart = global.get<Map<String, dynamic>>('cart');
+  final Map<String, dynamic> _cart = rawState.get<Map<String, dynamic>>('cart');
   final Map<String, dynamic> _selectedShowing =
-      global.get<Map<String, dynamic>>('selectedShowing');
+      rawState.get<Map<String, dynamic>>('selectedShowing');
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,7 @@ class _SeatState extends State<Seat> {
             throw Exception(
                 "Bad SeatStatus in Seat widget: ${widget.seat['status']}.");
         }
-        global.set('cart', newCart);
+        rawState.set('cart', newCart);
       },
     );
   }

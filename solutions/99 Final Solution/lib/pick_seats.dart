@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 import 'table.dart' as daam_table;
 
@@ -11,11 +11,11 @@ class PickSeats extends StatefulWidget {
 }
 
 class _PickSeatsState extends State<PickSeats> {
-  DateTime selectedDate = global.get<DateTime>("selectedDate");
+  DateTime selectedDate = rawState.get<DateTime>("selectedDate");
   Map<String, dynamic> selectedShowing =
-      global.get<Map<String, dynamic>>("selectedShowing");
-  Map<String, dynamic> cart = global.get("cart");
-  Map<String, dynamic> theater = global.get<Map<String, dynamic>>("theater");
+      rawState.get<Map<String, dynamic>>("selectedShowing");
+  Map<String, dynamic> cart = rawState.get("cart");
+  Map<String, dynamic> theater = rawState.get<Map<String, dynamic>>("theater");
 
   @override
   Widget build(BuildContext context) {

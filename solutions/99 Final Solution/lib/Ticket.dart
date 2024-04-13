@@ -1,4 +1,4 @@
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 
 class Ticket extends StatefulWidget {
@@ -9,7 +9,7 @@ class Ticket extends StatefulWidget {
 }
 
 class _TicketState extends State<Ticket> {
-  List<Map<String, dynamic>> tickets = global.get("tickets");
+  List<Map<String, dynamic>> tickets = rawState.get("tickets");
   @override
   Widget build(BuildContext context) {
     print("tix $tickets");

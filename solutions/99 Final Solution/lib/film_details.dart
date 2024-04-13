@@ -1,4 +1,4 @@
-import 'package:daam/state/global.dart';
+import 'package:raw_state/raw_state.dart';
 import 'package:daam/state/movie.dart';
 import 'package:flutter/material.dart';
 import 'showing_times.dart';
@@ -8,8 +8,8 @@ class FilmDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Movie selectedFilm = global.get<Movie>("selectedFilm");
-    DateTime selectedDate = global.get<DateTime>("selectedDate");
+    Movie selectedFilm = rawState.get<Movie>("selectedFilm");
+    DateTime selectedDate = rawState.get<DateTime>("selectedDate");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Film Details"),
@@ -18,7 +18,7 @@ class FilmDetails extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
             child: Flex(
-          direction: MediaQuery.of(context).orientation == Orientation.portrait
+          direction: MediaQuery.orientationOf(context) == Orientation.portrait
               ? Axis.vertical
               : Axis.horizontal,
           children: [
