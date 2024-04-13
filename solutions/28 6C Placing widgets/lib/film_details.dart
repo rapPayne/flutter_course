@@ -10,8 +10,7 @@ class FilmDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     Film selectedFilm = global.get<Film>("selectedFilm");
     DateTime selectedDate = global.get<DateTime>("selectedDate");
-    bool isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedFilm.title),
