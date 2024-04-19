@@ -14,7 +14,7 @@ class _PickSeatsState extends State<PickSeats> {
   DateTime selectedDate = rawState.get<DateTime>("selectedDate");
   Map<String, dynamic> selectedShowing =
       rawState.get<Map<String, dynamic>>("selectedShowing");
-  Map<String, dynamic> cart = rawState.get("cart");
+  Map<String, dynamic> cart = rawState.get<Map<String, dynamic>>("cart");
   Map<String, dynamic> theater = rawState.get<Map<String, dynamic>>("theater");
 
   @override
