@@ -1,16 +1,14 @@
-// ignore: unused_import
 import 'package:daam/checkout.dart';
 import 'package:daam/film_details.dart';
-// ignore: unused_import
 import 'package:daam/landing.dart';
 import 'package:daam/pick_seats.dart';
-import 'package:daam/state/global.dart';
 import 'package:daam/ticket.dart';
 import 'package:flutter/material.dart';
+import 'package:raw_state/raw_state.dart';
 
 void main() {
-  global.set("selectedDate", DateTime.now()); // <-- Add this line
-  global.set("cart", <String, dynamic>{"seats": []}); // <-- And this one
+  rawState.set("selectedDate", DateTime.now()); // <-- Add this line
+  rawState.set("cart", <String, dynamic>{"seats": []}); // <-- And this one
   runApp(const MyApp());
 }
 

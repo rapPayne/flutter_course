@@ -1,15 +1,15 @@
 import 'package:daam/showing_times.dart';
 import 'package:daam/state/film.dart';
-import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
+import 'package:raw_state/raw_state.dart';
 
 class FilmDetails extends StatelessWidget {
   const FilmDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Film selectedFilm = global.get<Film>("selectedFilm");
-    DateTime selectedDate = global.get<DateTime>("selectedDate");
+    Film selectedFilm = rawState.get<Film>("selectedFilm");
+    DateTime selectedDate = rawState.get<DateTime>("selectedDate");
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
       appBar: AppBar(

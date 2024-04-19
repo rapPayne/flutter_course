@@ -1,9 +1,9 @@
 // ignore_for_file: unused_field
 import 'dart:convert';
-import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:raw_state/raw_state.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -22,7 +22,7 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final GlobalKey<FormState> _key = GlobalKey();
-  final Map<String, dynamic> _purchase = global.get("cart");
+  final Map<String, dynamic> _purchase = rawState.get("cart");
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +176,7 @@ class _CheckoutState extends State<Checkout> {
     var headers = {'Content-Type': 'application/json'};
     post(uri, body: purchaseJson, headers: headers).then((res) {
       var ticketNumbers = (json.decode(res.body) as List).cast<int>();
-      global.set("ticketNumbers", ticketNumbers);
+      rawState.set("ticketNumbers", ticketNumbers);
       Navigator.pushNamed(context, "/ticket");
     }).catchError((e) {
       const SnackBar sb = SnackBar(
