@@ -1,7 +1,7 @@
 // ignore_for_file: unused_field
 import 'dart:convert';
-import 'package:daam/state/global.dart';
 import 'package:flutter/material.dart';
+import 'package:raw_state/raw_state.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -20,7 +20,7 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final GlobalKey<FormState> _key = GlobalKey();
-  final Map<String, dynamic> _purchase = global.get("cart");
+  final Map<String, dynamic> _purchase = rawState.get("cart");
 
   @override
   Widget build(BuildContext context) {

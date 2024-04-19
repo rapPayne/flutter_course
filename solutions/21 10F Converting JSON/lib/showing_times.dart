@@ -1,8 +1,8 @@
-import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:daam/state/film.dart';
+import 'package:raw_state/raw_state.dart';
 
 class ShowingTimes extends StatefulWidget {
   final Film film;
@@ -16,7 +16,7 @@ class ShowingTimes extends StatefulWidget {
 
 class _ShowingTimesState extends State<ShowingTimes> {
   List<dynamic> _showings = [];
-  Map<String, dynamic> cart = global.get<Map<String, dynamic>>("cart");
+  Map<String, dynamic> cart = rawState.get<Map<String, dynamic>>("cart");
 
   @override
   void initState() {
@@ -83,8 +83,8 @@ class _ShowingTimesState extends State<ShowingTimes> {
           seat['status'] = getSeatStatus(seat, reservations, cart);
         }
       }
-      global.set("theater", theater);
-      global.set("selectedShowing", showing);
+      rawState.set("theater", theater);
+      rawState.set("selectedShowing", showing);
 
       Navigator.pushNamed(context, '/pickseats');
     });

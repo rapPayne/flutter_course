@@ -1,7 +1,7 @@
-import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:raw_state/raw_state.dart';
 
 class DatePicker extends StatelessWidget {
   const DatePicker({super.key, required this.setSelectedDate});
@@ -16,7 +16,7 @@ class DatePicker extends StatelessWidget {
       children: dates
           .map((date) => TextButton(
                 onPressed: () {
-                  global.set("selectedDate", date);
+                  rawState.set("selectedDate", date);
                   setSelectedDate(date);
                 },
                 child: Text(DateFormat(DateFormat.WEEKDAY).format(date)),
