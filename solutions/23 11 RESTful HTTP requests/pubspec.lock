@@ -163,6 +163,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
+  raw_state:
+    dependency: "direct main"
+    description:
+      name: raw_state
+      sha256: "57a6c9fe03e6ba79bb9df562164b7679d470d3eb53caddb10f15de75d86c493c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -249,4 +257,5 @@ packages:
     source: hosted
     version: "0.5.1"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.2 <4.0.0"
+  flutter: ">=1.17.0"

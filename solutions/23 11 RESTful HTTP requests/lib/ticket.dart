@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:daam/state/global.dart';
 import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:raw_state/raw_state.dart';
 
 class Ticket extends StatefulWidget {
   const Ticket({super.key});
@@ -12,7 +12,7 @@ class Ticket extends StatefulWidget {
 }
 
 class _TicketState extends State<Ticket> {
-  List<int> ticketNumbers = global.get<List<int>>("ticketNumbers");
+  List<int> ticketNumbers = rawState.get<List<int>>("ticketNumbers");
   List<Map<String, dynamic>> tickets = [];
 
   @override
