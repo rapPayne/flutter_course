@@ -18,8 +18,8 @@ class _ChangePersonState extends ConsumerState<ChangePerson> {
 
   @override
   Widget build(BuildContext context) {
-    // person = ref.watch(favPersonStateNotifierProvider);
-    person = ref.watch(favPersonStateProvider);
+    person = ref.watch(favPersonStateNotifierProvider);
+    // person = ref.watch(favPersonStateProvider);
 
     _first = person.first;
     _last = person.last;
@@ -47,17 +47,17 @@ class _ChangePersonState extends ConsumerState<ChangePerson> {
 
   void _savePerson(person) {
     _key.currentState!.save();
-    // setState(
-    //   () {
-    //     ref.read(favPersonStateNotifierProvider.notifier).setFirst(_first);
-    //     ref.read(favPersonStateNotifierProvider.notifier).setLast(_last);
-    //   },
-    // );
     setState(
       () {
-        Person p = person.copyWith(first: _first, last: _last);
-        ref.read(favPersonStateProvider.notifier).state = p;
+        ref.read(favPersonStateNotifierProvider.notifier).setFirst(_first);
+        ref.read(favPersonStateNotifierProvider.notifier).setLast(_last);
       },
     );
+    // setState(
+    //   () {
+    //     Person p = person.copyWith(first: _first, last: _last);
+    //     ref.read(favPersonStateProvider.notifier).state = p;
+    //   },
+    // );
   }
 }
