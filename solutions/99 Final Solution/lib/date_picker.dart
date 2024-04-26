@@ -1,5 +1,3 @@
-// import 'package:daam/state/app_state.dart';
-// import 'package:daam/state/superState.dart';
 import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For days of the week
@@ -33,7 +31,7 @@ class _DatePickerState extends State<DatePicker> {
           // child: Flexible(
           child: Text(
             text,
-            style: date == selectedDate
+            style: date == selectedDate //TODO:Is there a better theme value?
                 ? const TextStyle(fontWeight: FontWeight.bold)
                 : const TextStyle(fontWeight: FontWeight.normal),
           ),

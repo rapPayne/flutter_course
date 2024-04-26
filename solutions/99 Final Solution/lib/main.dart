@@ -1,6 +1,7 @@
 import 'package:daam/state/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:raw_state/raw_state.dart';
+import 'theme.dart' show themeData;
 import 'checkout.dart';
 import 'film_details.dart';
 import 'landing.dart';
@@ -18,15 +19,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme colorScheme = ColorScheme.fromSwatch(
-      primarySwatch: Colors.blue,
-    ).copyWith(background: Colors.white);
-
-    var themeData = ThemeData(
-      colorScheme: colorScheme,
-      textTheme: const TextTheme(titleMedium: TextStyle(color: Colors.blue)),
-      useMaterial3: true,
-    );
     Customer customer = Customer()..email = "rap@creator.net";
     rawState.set("customer", customer);
     return OurThemeWidget(
