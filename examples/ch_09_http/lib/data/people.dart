@@ -10,14 +10,14 @@ Future<Response> fetchPeople() {
 }
 
 Future<Response> upsertPerson(Person person) {
-  final String payload = """
+  final String payload = '''
   {
     "id": ${person.id},
     "name":"${person.name}",
     "phone":"${person.phone}",
     "email":"${person.email}"
   }
-  """;
+  ''';
   final headers = {'Content-type': 'application/json'};
   // If id is null, we're adding. If not, we're updating.
   if (person.id == null) {

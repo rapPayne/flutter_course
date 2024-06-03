@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
             'You pushed the button this many times:',
           ),
           Text(
-            '12',
+            '7',
             style: myTheme.textTheme.headlineMedium,
           ),
           const TextField(

@@ -17,7 +17,7 @@ AppBarTheme _appBarTheme = const AppBarTheme().copyWith(
     foregroundColor: _colorScheme.onTertiaryContainer,
     color: _colorScheme.tertiary,
     titleTextStyle: _textTheme.displayLarge!.copyWith(fontFamily: 'Courier'));
-ListTileThemeData _listTileThemeData = ListTileThemeData(
+ListTileThemeData _listTileThemeData = const ListTileThemeData().copyWith(
     tileColor: _colorScheme.secondary,
     textColor: _colorScheme.onSecondary,
     contentPadding: const EdgeInsets.all(10.0));
