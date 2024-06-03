@@ -11,6 +11,7 @@ class FilmDetails extends StatelessWidget {
     Film selectedFilm = rawState.get<Film>("selectedFilm");
     DateTime selectedDate = rawState.get<DateTime>("selectedDate");
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+    bool isLandscape = !isPortrait;
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedFilm.title),
@@ -21,6 +22,10 @@ class FilmDetails extends StatelessWidget {
           children: [
             Image.network(
               "http://localhost:3008/${selectedFilm.posterPath}",
+              fit: BoxFit.cover,
+              height:
+                  isLandscape ? MediaQuery.sizeOf(context).height * 0.8 : null,
+              width: isPortrait ? 300.0 : null,
             ),
             Column(
               children: [
