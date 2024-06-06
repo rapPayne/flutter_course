@@ -12,7 +12,8 @@ class Ticket extends StatefulWidget {
 }
 
 class _TicketState extends State<Ticket> {
-  List<int> ticketNumbers = rawState.get<List<int>>("ticketNumbers");
+  List<Map<String, dynamic>> ticketNumbers =
+      rawState.get<List<Map<String, dynamic>>>("ticketNumbers");
   List<Map<String, dynamic>> tickets = [];
 
   @override
@@ -23,7 +24,7 @@ class _TicketState extends State<Ticket> {
   }
 
   Future<List<Map<String, dynamic>>> getReservations(
-      List<int> ticketNumbers) async {
+      List<Map<String, dynamic>> ticketNumbers) async {
     List<Future<Map<String, dynamic>>> futures = [];
     for (var ticketNumber in ticketNumbers) {
       Uri uri = Uri.parse('${getBaseUrl()}/api/reservations/$ticketNumber');

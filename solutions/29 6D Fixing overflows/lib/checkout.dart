@@ -185,7 +185,8 @@ class _CheckoutState extends State<Checkout> {
     var uri = Uri.parse(url);
     var headers = {'Content-Type': 'application/json'};
     post(uri, body: purchaseJson, headers: headers).then((res) {
-      var ticketNumbers = (json.decode(res.body) as List).cast<int>();
+      var ticketNumbers =
+          (json.decode(res.body) as List).cast<Map<String, dynamic>>();
       rawState.set("ticketNumbers", ticketNumbers);
       Navigator.pushNamed(context, "/ticket");
     }).catchError((e) {

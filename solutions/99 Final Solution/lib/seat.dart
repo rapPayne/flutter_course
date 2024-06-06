@@ -3,9 +3,9 @@ import 'package:daam/state/seat.dart';
 import 'package:flutter/material.dart';
 
 class Seat extends StatefulWidget {
+  const Seat({super.key, required this.seat, this.sizeOfSeat = 30.0});
   final Map<String, dynamic> seat;
-
-  const Seat({super.key, required this.seat});
+  final double sizeOfSeat;
 
   @override
   State<Seat> createState() => _SeatState();
@@ -31,12 +31,13 @@ class _SeatState extends State<Seat> {
     }
     return GestureDetector(
       child: SizedBox(
-        width: 30,
-        height: 30,
+        width: widget.sizeOfSeat,
+        height: widget.sizeOfSeat,
         child: Stack(alignment: Alignment.center, children: [
           Icon(
             Icons.weekend_rounded,
             color: _seatColor,
+            size: widget.sizeOfSeat,
           ),
           Text(widget.seat["seat_number"].toString()),
         ]),
