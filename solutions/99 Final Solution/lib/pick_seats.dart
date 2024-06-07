@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:flutter/widgets.dart';
 import 'package:raw_state/raw_state.dart';
 import 'package:flutter/material.dart';
 import 'table.dart' as daam_table;

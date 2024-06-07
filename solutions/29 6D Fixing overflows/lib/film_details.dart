@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:daam/showing_times.dart';
 import 'package:daam/state/film.dart';
 import 'package:flutter/material.dart';
