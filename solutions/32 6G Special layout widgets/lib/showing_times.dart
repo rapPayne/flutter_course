@@ -1,9 +1,9 @@
 import 'package:daam/state/repository.dart';
-import 'package:daam/state/seat_status.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:daam/state/film.dart';
 import 'package:raw_state/raw_state.dart';
+import 'package:daam/state/seat_status.dart';
 
 class ShowingTimes extends StatefulWidget {
   final Film film;
@@ -42,7 +42,8 @@ class _ShowingTimesState extends State<ShowingTimes> {
         Text("Showing times for $selectedDateString for ${widget.film.title}"),
         // ignore: avoid_unnecessary_containers
         Container(
-          child: Column(
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
             children: _showings.map((s) => _makeShowingWidget(s)).toList(),
           ),
         ),
@@ -54,7 +55,11 @@ class _ShowingTimesState extends State<ShowingTimes> {
     DateTime showingTime = DateTime.parse(showing["showing_time"]);
     String timeString = DateFormat.jm().format(showingTime.toLocal());
     return TextButton(
-        onPressed: () => chooseShowing(showing), child: Text(timeString));
+      onPressed: () => chooseShowing(showing),
+      child: Text(
+        timeString,
+      ),
+    );
   }
 
   void loadShowings() {
@@ -95,8 +100,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
 /// cart: The current shopping cart. You may already have this seat in your cart.
 SeatStatus getSeatStatus(Map seat, List<Map<String, dynamic>> reservations,
     Map<String, dynamic> cart) {
-  bool seatIsInCart =
-      cart['seats'].any((heldSeat) => heldSeat['id'] == seat['id']);
+  bool seatIsInCart = cart['seats'].any((heldSeat) => heldSeat == seat['id']);
   if (seatIsInCart) {
     return SeatStatus.inCart;
   }

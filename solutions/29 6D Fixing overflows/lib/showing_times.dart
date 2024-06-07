@@ -1,4 +1,5 @@
 import 'package:daam/state/repository.dart';
+import 'package:daam/state/seat_status.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:daam/state/film.dart';
@@ -90,12 +91,6 @@ class _ShowingTimesState extends State<ShowingTimes> {
       Navigator.pushNamed(context, '/pickseats');
     });
   }
-}
-
-enum SeatStatus {
-  available, // Duh
-  inCart, // Available, but you have it in your cart
-  reserved // Somebody else has this seat reserved
 }
 
 /// Returns a seat's status
