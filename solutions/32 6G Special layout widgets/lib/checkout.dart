@@ -1,6 +1,10 @@
 // ignore_for_file: unused_field
-
+import 'dart:convert';
+import 'package:daam/state/repository.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+import 'package:raw_state/raw_state.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -19,25 +23,24 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final GlobalKey<FormState> _key = GlobalKey();
-  final Map<String, dynamic> _cart = {
-    "seats": [1, 2, 3],
-    "showing_id": 1,
-  };
+  final Map<String, dynamic> _cart = rawState.get("cart");
 
   @override
   Widget build(BuildContext context) {
+    print(_cart);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Checkout"),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             const Text("Checkout"),
             const Text("Your cart"),
             // ignore: avoid_unnecessary_containers
             Container(
-              child: const Text("Cart will go here"),
+              child: Table(children: _makeTableRows()),
             ),
             _makeCheckoutForm(),
           ],
@@ -48,6 +51,37 @@ class _CheckoutState extends State<Checkout> {
         onPressed: () => _checkout(),
       ),
     );
+  }
+
+  List<TableRow> _makeTableRows() {
+    var formatter = NumberFormat.currency(locale: 'en_US', symbol: r'$');
+    List<TableRow> rows = <TableRow>[];
+    double subtotal = 0.00;
+    for (var seat in _cart['seats']) {
+      subtotal += seat['price'];
+      rows.add(TableRow(children: [
+        Text('Table ${seat['table_number']} Seat ${seat['seat_number']}'),
+        const Text(''),
+        Text(formatter.format(seat['price'])),
+      ]));
+    }
+    rows.add(TableRow(children: [
+      const Text(''),
+      const Text('Subtotal:'),
+      Text(formatter.format(subtotal)),
+    ]));
+    double tax = subtotal * 0.0825;
+    rows.add(TableRow(children: [
+      const Text(''),
+      const Text('Tax:'),
+      Text(formatter.format(tax)),
+    ]));
+    rows.add(TableRow(children: [
+      const Text(''),
+      const Text('Total:'),
+      Text(formatter.format(subtotal + tax)),
+    ]));
+    return rows;
   }
 
   Widget _makeCheckoutForm() {
@@ -141,25 +175,38 @@ class _CheckoutState extends State<Checkout> {
               return null;
             },
           ),
-          DropdownButtonFormField(
-            value: _expiryMonth,
-            items: _expiryMonths,
-            decoration: const InputDecoration(
-              label: Text("Expiry month"),
-            ),
-            onChanged: (val) => setState(() => _expiryMonth = val),
-            onSaved: (val) => _cart["expiryMonth"] = val,
-            validator: (val) => _validateExpiry(),
-          ),
-          DropdownButtonFormField(
-            value: _expiryYear,
-            items: _makeExpiryYears(),
-            decoration: const InputDecoration(
-              label: Text("Expiry year"),
-            ),
-            onChanged: (val) => setState(() => _expiryYear = val),
-            onSaved: (val) => _cart["expiryYear"] = val,
-            validator: (val) => _validateExpiry(),
+          Row(
+            children: [
+              Flexible(
+                flex: 6,
+                // Expanded works here too.
+                child: DropdownButtonFormField(
+                  value: _expiryMonth,
+                  items: _expiryMonths,
+                  decoration: const InputDecoration(
+                    label: Text("Expiry month"),
+                  ),
+                  onChanged: (val) => setState(() => _expiryMonth = val),
+                  onSaved: (val) => _cart["expiryMonth"] = val,
+                  validator: (val) => _validateExpiry(),
+                ),
+              ),
+              const Spacer(),
+              Flexible(
+                // Expanded works here too.
+                flex: 6, // <-- Add this
+                child: DropdownButtonFormField(
+                  value: _expiryYear,
+                  items: _makeExpiryYears(),
+                  decoration: const InputDecoration(
+                    label: Text("Expiry year"),
+                  ),
+                  onChanged: (val) => setState(() => _expiryYear = val),
+                  onSaved: (val) => _cart["expiryYear"] = val,
+                  validator: (val) => _validateExpiry(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -171,7 +218,24 @@ class _CheckoutState extends State<Checkout> {
     if (!_key.currentState!.validate()) return;
     _key.currentState?.save();
     print(_cart);
-    Navigator.pushNamed(context, "/ticket");
+    var purchaseJson = json.encode(_cart);
+    var url = '${getBaseUrl()}/api/buyTickets';
+    var uri = Uri.parse(url);
+    var headers = {'Content-Type': 'application/json'};
+    post(uri, body: purchaseJson, headers: headers).then((res) {
+      var ticketNumbers =
+          (json.decode(res.body) as List).cast<Map<String, dynamic>>();
+      rawState.set("ticketNumbers", ticketNumbers);
+      Navigator.pushNamed(context, "/ticket");
+    }).catchError((e) {
+      debugPrint("Error purchasing tickets.");
+      debugPrint(e);
+      const SnackBar sb = SnackBar(
+        content: Text("Purchase failed. Try again."),
+        duration: Duration(seconds: 5),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(sb);
+    });
   }
 
   String? _validateExpiry() {

@@ -22,7 +22,7 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryMonth;
   String? _expiryYear;
   final GlobalKey<FormState> _key = GlobalKey();
-  final Map<String, dynamic> _purchase = rawState.get("cart");
+  final Map<String, dynamic> _cart = rawState.get("cart");
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _CheckoutState extends State<Checkout> {
               label: Text("First name"),
             ),
             onChanged: (val) => _firstName = val,
-            onSaved: (val) => _purchase["firstName"] = val,
+            onSaved: (val) => _cart["firstName"] = val,
             validator: (val) => val == null || val.isEmpty ? "Required" : null,
           ),
           TextFormField(
@@ -68,7 +68,7 @@ class _CheckoutState extends State<Checkout> {
               label: Text("Last name"),
             ),
             onChanged: (val) => _lastName = val,
-            onSaved: (val) => _purchase["lastName"] = val,
+            onSaved: (val) => _cart["lastName"] = val,
             validator: (val) => val == null || val.isEmpty ? "Required" : null,
           ),
           TextFormField(
@@ -78,7 +78,7 @@ class _CheckoutState extends State<Checkout> {
               ),
               keyboardType: TextInputType.emailAddress,
               onChanged: (val) => _email = val,
-              onSaved: (val) => _purchase["email"] = val,
+              onSaved: (val) => _cart["email"] = val,
               validator: (val) {
                 if ((val == null || val.isEmpty) &&
                     (_phone == null || _phone!.isEmpty)) {
@@ -94,7 +94,7 @@ class _CheckoutState extends State<Checkout> {
               ),
               keyboardType: TextInputType.phone,
               onChanged: (val) => _phone = val,
-              onSaved: (val) => _purchase["phone"] = val,
+              onSaved: (val) => _cart["phone"] = val,
               validator: (val) {
                 if ((val == null || val.isEmpty) &&
                     (_email == null || _email!.isEmpty)) {
@@ -110,7 +110,7 @@ class _CheckoutState extends State<Checkout> {
             ),
             keyboardType: TextInputType.number,
             onChanged: (val) => _creditCardNumber = val,
-            onSaved: (val) => _purchase["creditCardNumber"] = val,
+            onSaved: (val) => _cart["creditCardNumber"] = val,
             validator: (val) {
               if (val == null || val.isEmpty) {
                 return "Required";
@@ -129,7 +129,7 @@ class _CheckoutState extends State<Checkout> {
             ),
             keyboardType: TextInputType.number,
             onChanged: (val) => _cvv = val,
-            onSaved: (val) => _purchase["CVV"] = val,
+            onSaved: (val) => _cart["CVV"] = val,
             validator: (val) {
               if (val == null || val.isEmpty) {
                 return "Required";
@@ -153,7 +153,7 @@ class _CheckoutState extends State<Checkout> {
                     label: Text("Expiry month"),
                   ),
                   onChanged: (val) => setState(() => _expiryMonth = val),
-                  onSaved: (val) => _purchase["expiryMonth"] = val,
+                  onSaved: (val) => _cart["expiryMonth"] = val,
                   validator: (val) => _validateExpiry(),
                 ),
               ),
@@ -168,7 +168,7 @@ class _CheckoutState extends State<Checkout> {
                     label: Text("Expiry year"),
                   ),
                   onChanged: (val) => setState(() => _expiryYear = val),
-                  onSaved: (val) => _purchase["expiryYear"] = val,
+                  onSaved: (val) => _cart["expiryYear"] = val,
                   validator: (val) => _validateExpiry(),
                 ),
               ),
@@ -183,7 +183,7 @@ class _CheckoutState extends State<Checkout> {
     if (_key.currentState == null) return;
     if (!_key.currentState!.validate()) return;
     _key.currentState?.save();
-    var purchaseJson = json.encode(_purchase);
+    var purchaseJson = json.encode(_cart);
     var url = '${getBaseUrl()}/api/buyTickets';
     var uri = Uri.parse(url);
     var headers = {'Content-Type': 'application/json'};

@@ -20,7 +20,6 @@ class _CheckoutState extends State<Checkout> {
   String? _cvv;
   String? _expiryMonth;
   String? _expiryYear;
-  final Map<String, dynamic> _purchase = {};
   final Map<String, dynamic> _cart = rawState.get<Map<String, dynamic>>('cart');
   Map<String, dynamic> selectedShowing =
       rawState.get<Map<String, dynamic>>('selectedShowing');
@@ -61,8 +60,8 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    _purchase['showing_id'] = selectedShowing['id'];
-    _purchase['seats'] = _cart['seats'].map((seat) => seat['id']).toList();
+    _cart['showing_id'] = selectedShowing['id'];
+    //_cart['seats'] = _cart['seats'].map((seat) => seat['id']).toList();
     _first = _customer?.first;
     _last = _customer?.last;
     _email = _customer?.email;
@@ -77,7 +76,7 @@ class _CheckoutState extends State<Checkout> {
       if (!_key.currentState!.validate()) return;
       _key.currentState!.save();
 
-      buyTickets(purchase: _purchase).then((res) {
+      buyTickets(purchase: _cart).then((res) {
         // Empty out the cart
         rawState.set('cart', <String, dynamic>{});
         List<Map<String, dynamic>> tickets =
@@ -134,14 +133,14 @@ class _CheckoutState extends State<Checkout> {
             onChanged: (val) => _first = val,
             validator: (val) =>
                 (val ?? "").isNotEmpty ? null : "First name is required",
-            onSaved: (val) => _purchase["first_name"] = val,
+            onSaved: (val) => _cart["first_name"] = val,
             decoration: const InputDecoration(labelText: "First name"),
           ),
           TextFormField(
             onChanged: (val) => _last = val,
             validator: (val) =>
                 (val ?? "").isNotEmpty ? null : "Last name is required",
-            onSaved: (val) => _purchase["last_name"] = val,
+            onSaved: (val) => _cart["last_name"] = val,
             decoration: const InputDecoration(labelText: "Last name"),
           ),
           TextFormField(
@@ -150,21 +149,21 @@ class _CheckoutState extends State<Checkout> {
             validator: (val) => RegExp(r"^\w+@\w+\.\w+$").hasMatch(val ?? "")
                 ? null
                 : "That isn't a valid email",
-            onSaved: (val) => _purchase["email"] = val,
+            onSaved: (val) => _cart["email"] = val,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
                 labelText: "Email", hintText: "you@yourEmail.com"),
           ),
           TextFormField(
             onChanged: (val) => _phone = val,
-            onSaved: (val) => _purchase["phone"] = val,
+            onSaved: (val) => _cart["phone"] = val,
             keyboardType: TextInputType.phone,
             decoration: const InputDecoration(
                 labelText: "Phone (optional)", hintText: "xxx-xxx-xxxx"),
           ),
           TextFormField(
             onChanged: (val) => _pan = val,
-            onSaved: (val) => _purchase["pan"] = val,
+            onSaved: (val) => _cart["pan"] = val,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 labelText: "Credit card number",
@@ -172,7 +171,7 @@ class _CheckoutState extends State<Checkout> {
           ),
           TextFormField(
             onChanged: (val) => _cvv = val,
-            onSaved: (val) => _purchase["cvv"] = val,
+            onSaved: (val) => _cart["cvv"] = val,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(labelText: "CVV"),
           ),
@@ -183,7 +182,7 @@ class _CheckoutState extends State<Checkout> {
                 margin: const EdgeInsets.only(right: 10),
                 child: DropdownButtonFormField<String>(
                   onChanged: (val) => setState(() => _expiryMonth = val),
-                  onSaved: (val) => _purchase["expiry_month"] = val,
+                  onSaved: (val) => _cart["expiry_month"] = val,
                   value: _expiryMonth,
                   items: _expiryMonths,
                 ),
@@ -193,7 +192,7 @@ class _CheckoutState extends State<Checkout> {
                 child: DropdownButtonFormField<String>(
                   value: _expiryYear,
                   onChanged: (val) => setState(() => _expiryYear = val),
-                  onSaved: (val) => _purchase["expiry_year"] = val,
+                  onSaved: (val) => _cart["expiry_year"] = val,
                   items: _makeExpiryYears(),
                 ),
               ),
