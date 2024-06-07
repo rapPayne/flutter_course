@@ -24,16 +24,14 @@ class _PickSeatsState extends State<PickSeats> {
     print("Screen size: $screenSize");
 
     var appBarSize = AppBar().preferredSize;
-    print("AppBar size: $appBarSize");
     var usableHeight = screenSize.height - appBarSize.height;
-    var usableWidth = screenSize.width;
+    var usableWidth = 0.8 * screenSize.width;
     print("$usableWidth, $usableHeight");
-    var random = Random().nextInt(1000);
     assert(selectedShowing["theater_id"] == theater["id"],
         "Theater is out of sync. That should never happen.");
     return Scaffold(
         appBar: AppBar(
-          title: Text("Pick your seats $random"),
+          title: const Text("Pick your seats"),
         ),
         body: InteractiveViewer(
           // minScale: 0.2,
