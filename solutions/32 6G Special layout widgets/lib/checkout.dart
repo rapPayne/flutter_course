@@ -27,7 +27,6 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    print(_cart);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Checkout"),

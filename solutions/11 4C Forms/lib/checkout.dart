@@ -20,7 +20,11 @@ class _CheckoutState extends State<Checkout> {
   String? _expiryYear;
   final GlobalKey<FormState> _key = GlobalKey();
   final Map<String, dynamic> _cart = {
-    "seats": [1, 2, 3],
+    "seats": [
+      {'id': 1},
+      {'id': 2},
+      {'id': 3}
+    ],
     "showing_id": 1,
   };
 
