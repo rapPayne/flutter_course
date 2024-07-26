@@ -34,7 +34,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
         Container(
           child: Column(
             children: _showings
-                .map((s) => makeTextWidget(s["showing_time"]))
+                .map((s) => _makeShowingWidget(s["showing_time"]))
                 .toList(),
           ),
         ),
@@ -42,7 +42,7 @@ class _ShowingTimesState extends State<ShowingTimes> {
     );
   }
 
-  Text makeTextWidget(dynamic dateString) {
+  Widget _makeShowingWidget(dynamic dateString) {
     DateTime showingTime = DateTime.parse(dateString);
     String timeString = DateFormat.jm().format(showingTime.toLocal());
     return Text(timeString);
