@@ -27,7 +27,8 @@ class _TicketState extends State<Ticket> {
       List<Map<String, dynamic>> ticketNumbers) async {
     List<Future<Map<String, dynamic>>> futures = [];
     for (var ticketNumber in ticketNumbers) {
-      Uri uri = Uri.parse('${getBaseUrl()}/api/reservations/$ticketNumber');
+      Uri uri =
+          Uri.parse('${getBaseUrl()}/api/reservations/${ticketNumber["id"]}');
       futures.add(get(uri).then((res) => json.decode(res.body)));
     }
     return Future.wait(futures);
