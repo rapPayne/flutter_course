@@ -5,6 +5,18 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/intl.dart';
 import 'film.dart';
 
+// Make a list of five days
+List<DateTime> makeConsecutiveDates(
+    {int howMany = 5, required DateTime startDate}) {
+  List<DateTime> dates = <DateTime>[];
+  for (int i = 0; i < 5; i++) {
+    DateTime day = startDate.add(Duration(days: i));
+    dates.add(day);
+  }
+  return dates;
+}
+
+
 /// Returns the best URL string based on the running platform. 
 /// The different platforms block different URLs. This function 
 /// allows us to request API data regardless of where we're 
